@@ -1,0 +1,20 @@
+{
+  "name": "web_project",
+  "version": "1.0.0",
+  "description": "Har data analyzer for CEID_NY538 ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "ipstack": "^0.1.1",
+    "node-freegeoip": "0.0.1",
+    "passport": "^0.4.1",
+    "pg": "^8.5.1"
+  }
+}
