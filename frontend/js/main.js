@@ -64,7 +64,6 @@ function Responses() {
     console.log(data);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://127.0.0.1:3000/login", true);
-    //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -76,8 +75,5 @@ function Responses() {
             }
         }
     };
-
     xhr.send(data);
-
-
 }

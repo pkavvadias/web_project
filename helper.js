@@ -6,7 +6,6 @@ const pool = new Pool({
         password: 'admin',
         port: 5432,
     })
-    //exports.pool = pool;
 var http = require('http');
 //var access_key = 'b694a05e28d302cf008d7229dd58d29d'; //ipstack api key
 //const ipstack = require('ipstack')

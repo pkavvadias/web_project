@@ -8,7 +8,7 @@ const uploadHar = (request, response) => {
     console.log(request.ip);
     for (i = 0; i < request.body.length; i++) {
         finalJSON = {          
-            "username_user": "username",//TODO:username from user session(username_user:request.ip)
+            "username_user": request.ip,//check this
             "starteddatetime": request.body[i].startedDateTime,
             "serveripaddress": request.body[i].serverIPAddress,
             "wait": request.body[i].wait,
