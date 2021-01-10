@@ -4,10 +4,11 @@ const uploadHar = (request, response) => {
   var JSONtoInsert = new Array();
     //console.log(request.ip);
     //var userIP = request.ip; 
+    //console.log(request.user.username);
     var userIP = "85.75.169.61";//Remove when on server,just for test
     for (i = 0; i < request.body.length; i++) {
         finalJSON = {          
-            "username_user": request.ip,//TODO:username from user session
+            "username_user": request.user.username,
             "starteddatetime": request.body[i].startedDateTime,
             "serveripaddress": request.body[i].serverIPAddress,
             "wait": request.body[i].wait,

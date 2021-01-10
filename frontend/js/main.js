@@ -61,7 +61,7 @@ function Responses() {
         "password" : document.getElementById('password-user').value
     }
     data = JSON.stringify(formdata);
-    console.log(data);
+   // console.log(data);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://127.0.0.1:3000/login", true);
     xhr.setRequestHeader('Content-Type', 'application/json');

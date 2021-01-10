@@ -15,7 +15,11 @@
     <h1> Hello
         <%=user %>
     </h1>
-
+    <form id="HarForm">
+        <input type="file" id="myFile" name="filename">
+        <input type="button" value="Submit" onclick="SendToServer();">
+        <input type="button" value="Export" onclick="Export();">
+    </form>
 </body>
-
+<script src="./js/test.js"></script>
 </html>

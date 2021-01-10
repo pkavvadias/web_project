@@ -142,7 +142,7 @@ app.post('/login', function(req, res, next) {
     if (!user) {res.status(403).send("Wrong username or password"); }
     else{
     req.logIn(user, function(err) {
-      if (err) { return next(err); }
+      if (err) { return next(err); }   
       res.redirect("./dashboard");
     });
   }
@@ -151,7 +151,7 @@ app.post('/login', function(req, res, next) {
 
 function Authenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        return res.redirect("./dashboard");
+        return res.redirect("./dashboard");        
     }
     next();
 }
@@ -163,6 +163,6 @@ function NotAuthenticated(req, res, next) {
     res.redirect("./login");
 }
 
-app.post('/uploadHar', db.uploadHar)
-
+app.post('/uploadHar', NotAuthenticated,db.uploadHar)
+//app.post('/uploadHar',db.uploadHar)
 app.listen(port, '0.0.0.0') //To run on all available interfaces
