@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+
+    <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.3/css/bootstrap.min.css'>
+
+
+    <link rel="stylesheet" type="text/css" href="/css/util.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #303641;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="limiter">
+        <div class="container-login">
+            <div class="wrap-login p-l-50 p-r-50 p-t-62 p-b-30">
+                <form id="patates" class="login-form validate-form" validate action="/login" method="POST">
+                    <span class="login-form-title p-b-50">
+						<div id="title">
+            <i class="material-icons lock">lock</i> Login
+        
+           <!----> <ul>
+                <!--<% if(messages.success_msg) { %>
+                <li><%- messages.success_msg %>
+
+                </li>
+                <% } %>
+
+            </ul>
+
+            <ul>
+                <% if(mesages.error) {  %>
+                <li><%- messages.error %></li>
+
+
+               <% } %>
+
+                </ul>-->
+            
+        	</div>
+					</span>
+
+                    <div class="wrap-input  m-b-16">
+                        <input class="input" type="text" id="username-user" name="username" placeholder="Username" required class="validate" autocomplete="off">
+
+                    </div>
+
+
+                    <div class="wrap-input m-b-16">
+                        <input class="input" type="password" id="password-user" name="password" placeholder="Password" required class="validate" autocomplete="off">
+                    </div>
+
+                    <div class="m-l-4">
+                        <input type="checkbox">
+                        <span style="color: #000000">Remember Me</span>
+
+                    </div>
+
+                    <div class="container-login-form-btn p-t-25">
+                        <button type="submit" class="login-form-btn">
+							Login
+						</button>
+                    </div>
+
+                    <div class="text-center w-full p-t-30">
+                        <a href="forgot.html"><span type="button" class="txt1">Forgot your password?</span></a>
+                    </div>
+
+                </form>
+
+                <div class="text-center w-full p-t-15">
+                    <span class="txt1">
+								Don't have an account yet?
+							</span>
+
+
+                    <a href="/register"><button type="button" class="register-form-btn">	Sign up here please!</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.3/js/bootstrap.bundle.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+
+
+
+    <script src="js/main.js"></script>
+    <!---- <script>
+        function responsees() {
+            var form = document.querySelector('form');
+            var data = new FormData(document.getElementById('patates'));
+            //console.log(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:3000/login", true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    console.log(xhr.responseText);
+                }
+            };
+
+            xhr.send(data);
+
+
+        }
+    </script>-->
+
+
+</body>
+
+</html>

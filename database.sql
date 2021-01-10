@@ -4,9 +4,9 @@ CREATE DATABASE webproject;
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users
 (
-username VARCHAR(15) UNIQUE NOT NULL PRIMARY KEY,
-password varchar(10) NOT NULL,
-email varchar(30) UNIQUE NOT NULL
+username VARCHAR(100) UNIQUE NOT NULL PRIMARY KEY,
+email varchar(300) UNIQUE NOT NULL,
+password varchar(200) NOT NULL
 );
 
 DROP TABLE IF EXISTS har_data;
