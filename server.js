@@ -13,7 +13,6 @@ const initializePass = require('./passportCf')
 const app = express()
 const port = 3000
 
-
 initializePass(passport);
 app.use(express.static('frontend'))
 
@@ -40,7 +39,7 @@ app.use(cors())
 
 //app.use('/', routes)
 //require('./passport.js')(passport)
-app.use(express.json());
+//app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '100mb' }));
 
