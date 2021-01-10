@@ -5,6 +5,7 @@ const uploadHar = (request, response) => {
     //console.log(request.ip);
     //var userIP = request.ip; 
     var userIP = "85.75.169.61";//Remove when on server,just for test
+    console.log(request.ip);
     for (i = 0; i < request.body.length; i++) {
         finalJSON = {
             "username_user": "username",//TODO:username from user session

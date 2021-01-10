@@ -3,7 +3,7 @@ const pool = new Pool({
         user: 'postgres',
         host: '127.0.0.1',
         database: 'webproject',
-        password: 'magic123',
+        password: 'admin',
         port: 5432,
     })
     //exports.pool = pool;
