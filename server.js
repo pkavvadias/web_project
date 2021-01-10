@@ -13,7 +13,9 @@ const initializePass = require('./passportCf')
 const app = express()
 const port = 3000
 
-initializePass(passport);
+initializePass.initialize(passport);
+const Authenticated = initializePass.Authenticated;
+const NotAuthenticated = initializePass.NotAuthenticated;
 app.use(express.static('frontend'))
 
 
@@ -37,9 +39,6 @@ app.use(function(req, res, next) {
 
 app.use(cors())
 
-//app.use('/', routes)
-//require('./passport.js')(passport)
-//app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '100mb' }));
 
@@ -55,7 +54,6 @@ app.get("/register", Authenticated, function(req, res) {
 })
 
 app.get("/login", Authenticated, function(req, res) {
-    //console.log(req.session.flash.error)
     res.sendFile(path.join(__dirname + "/frontend/login.html"));
 })
 
@@ -125,16 +123,6 @@ app.post("/register", async function(req, res) {
     );
 });
 
-/*
-app.post("/login", urlencodedParser, (req, res) =>
-    passport.authenticate('local', {
-        successRedirect: "/dashboard",
-        failureRedirect: "/login",
-        failureFlash: 'Invalide username or passsword'
-    })
-    (req, res)
-);
-*/
 app.post('/login', function(req, res, next) {
   console.log(req.body);
   passport.authenticate('local', function(err, user, info) {
@@ -149,20 +137,5 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
-function Authenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect("./dashboard");        
-    }
-    next();
-}
-
-function NotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("./login");
-}
-
 app.post('/uploadHar', NotAuthenticated,db.uploadHar)
-//app.post('/uploadHar',db.uploadHar)
 app.listen(port, '0.0.0.0') //To run on all available interfaces

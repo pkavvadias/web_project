@@ -70,4 +70,23 @@ function initialize(passport) {
 
 }
 
-module.exports = initialize;
+
+function Authenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect("./dashboard");        
+    }
+    next();
+}
+
+function NotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("./login");
+}
+
+module.exports = {
+    initialize,
+    Authenticated,
+    NotAuthenticated,
+}
