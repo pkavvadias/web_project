@@ -27,6 +27,7 @@ function initialize(passport) {
                             return done(null, user);
                         } else {
                             //incorrect password
+                            //response.send("error");
                             return done(null, false, { message: "Incorrect password." });
                         }
                     });

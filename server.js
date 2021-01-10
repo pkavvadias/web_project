@@ -129,15 +129,29 @@ app.post("/register", async function(req, res) {
     );
 });
 
+/*
 app.post("/login", urlencodedParser, (req, res) =>
     passport.authenticate('local', {
-        successRedirect: "./dashboard",
-        failureRedirect: "./login",
+        successRedirect: "/dashboard",
+        failureRedirect: "/login",
         failureFlash: 'Invalide username or passsword'
     })
     (req, res)
 );
-
+*/
+app.post('/login', function(req, res, next) {
+  console.log(req.body);
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {res.status(403).send("Wrong username or password"); }
+    else{
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      res.redirect("./dashboard");
+    });
+  }
+  })(req, res, next);
+});
 
 function Authenticated(req, res, next) {
     if (req.isAuthenticated()) {
