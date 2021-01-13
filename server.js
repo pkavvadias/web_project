@@ -2,20 +2,20 @@ const helper = require('./helper')
 const express = require('express')
 const bodyParser = require('body-parser')
 const urlencodedParser = bodyParser.urlencoded({ extended: true });
-const db = require('./apis')
+const apis = require('./apis')
 const cors = require('cors')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
 const path = require('path')
 const bcrypt = require('bcrypt')
-const initializePass = require('./passportCf')
+const authentication = require('./passportCf')
 const app = express()
 const port = 3000
 
-initializePass.initialize(passport);
-const Authenticated = initializePass.Authenticated;
-const NotAuthenticated = initializePass.NotAuthenticated;
+authentication.initialize(passport);
+const Authenticated = authentication.Authenticated;
+const NotAuthenticated = authentication.NotAuthenticated;
 app.use(express.static('frontend'))
 
 
@@ -28,14 +28,6 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
-
-
-
-app.use(flash())
-app.use(function(req, res, next) {
-    res.locals.message = req.flash();
-    next();
-});
 
 app.use(cors())
 
@@ -66,76 +58,12 @@ app.get("/dashboard", NotAuthenticated, function(req, res) {
 
 app.get('/logout', function(req, res) {
     req.logOut();
-    req.flash('success_msg', "Logged Out")
+    //req.flash('success_msg', "Logged Out")
     res.redirect('./login')
 
 })
 
-
-app.post("/register", async function(req, res) {
-    let { username, email, password, password_conf } = req.body;
-    console.log({
-        username,
-        email,
-        password
-    });
-
-    let hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
-
-
-    await helper.pool.query(
-        'SELECT * FROM users WHERE username = $1', [username],
-        (err, results) => {
-            if (err) {
-                throw err;
-            }
-
-            console.log(results.rows)
-                //} catch (err) {
-                //  console.log('failed to connect', err);
-
-
-            if (results.rows.length > 0) {
-                console.log("Uparxei xristis");
-                // req.flash('error', "")
-                //res.redirect('./login')
-                res.status(400).send('User is already registered. Proceed to log in or create new user.');
-                // res.sendFile(path.join(__dirname + "/frontend/login.html"));
-            } else {
-                console.log("Den uparxei xristis");
-                helper.pool.query(
-                    'INSERT INTO  users VALUES ($1, $2, $3) RETURNING username, password', [username, email, hashedPassword],
-                    (err, results) => {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log(results.rows);
-                        req.flash('success_msg', 'Registered!!!! Log in now!');
-                        res.redirect("./login")
-
-                    }
-                );
-            }
-        }
-
-
-    );
-});
-
-app.post('/login', function(req, res, next) {
-  console.log(req.body);
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) {res.status(403).send("Wrong username or password"); }
-    else{
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }   
-      res.redirect("./dashboard");
-    });
-  }
-  })(req, res, next);
-});
-
-app.post('/uploadHar', NotAuthenticated,db.uploadHar)
+app.post('/uploadHar', NotAuthenticated,apis.uploadHar);
+app.post('/login',authentication.login);
+app.post("/register",authentication.register);
 app.listen(port, '0.0.0.0') //To run on all available interfaces
