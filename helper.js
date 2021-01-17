@@ -1,11 +1,11 @@
 const { Pool } = require('pg')
 const pool = new Pool({
-        user: 'postgres',
-        host: '127.0.0.1',
-        database: 'webproject',
-        password: 'admin',
-        port: 5432,
-    })
+    user: 'postgres',
+    host: '127.0.0.1',
+    database: 'webproject',
+    password: 'magic123',
+    port: 5432,
+})
 var http = require('http');
 //var access_key = 'b694a05e28d302cf008d7229dd58d29d'; //ipstack api key
 //const ipstack = require('ipstack')

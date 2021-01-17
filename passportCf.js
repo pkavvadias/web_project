@@ -53,6 +53,7 @@ function initialize(passport) {
     //   the user username as the key) req.session.passport.user = {username: 'kati'}
     passport.serializeUser((user, done) => {
         console.log("Session");
+        console.log(user.username);
         done(null, user.username);
     });
 
@@ -74,7 +75,7 @@ function initialize(passport) {
 
 function Authenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        return res.redirect("./dashboard");        
+        return res.redirect("./dashboard");
     }
     next();
 }
@@ -88,11 +89,10 @@ function NotAuthenticated(req, res, next) {
 
 const login = (req, res, next) => {
     console.log(req.body);
-    passport.authenticate('local', function (err, user, info) {
+    passport.authenticate('local', function(err, user, info) {
         if (err) { return next(err); }
-        if (!user) { res.status(403).send("Wrong username or password"); }
-        else {
-            req.logIn(user, function (err) {
+        if (!user) { res.status(403).send("Wrong username or password"); } else {
+            req.logIn(user, function(err) {
                 if (err) { return next(err); }
                 res.redirect("./dashboard");
             });
@@ -102,7 +102,7 @@ const login = (req, res, next) => {
 }
 
 
-async function register(req, res){
+async function register(req, res) {
     let { username, email, password, password_conf } = req.body;
     console.log({
         username,
@@ -122,8 +122,8 @@ async function register(req, res){
             }
 
             console.log(results.rows)
-            //} catch (err) {
-            //  console.log('failed to connect', err);
+                //} catch (err) {
+                //  console.log('failed to connect', err);
 
 
             if (results.rows.length > 0) {
