@@ -10,7 +10,7 @@ function Responses() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
-            console.log('geia');
+            console.log('mainjs');
             if (xhr.status == 403) {
                 alert(xhr.responseText);
             } else if (xhr.status == 200) {

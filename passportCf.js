@@ -54,18 +54,18 @@ function initialize(passport) {
     passport.serializeUser((user, done) => {
         console.log("Session");
         console.log(user.username);
-        done(null, user.username);
+        done(null, user.email);
     });
 
     // In deserializeUser that key is matched with the in memory array / database or any data resource.
     // The fetched object is attached to the request object as req.user
 
-    passport.deserializeUser((username, done) => {
-        helper.pool.query('SELECT * FROM users WHERE username = $1', [username], (err, results) => {
+    passport.deserializeUser((email, done) => {
+        helper.pool.query('SELECT * FROM users WHERE email = $1', [email], (err, results) => {
             if (err) {
                 return done(err);
             }
-            console.log(results.rows[0].username)
+            // console.log(results.rows[0].username)
             return done(null, results.rows[0]);
         });
     });
@@ -90,6 +90,7 @@ function NotAuthenticated(req, res, next) {
 const login = (req, res, next) => {
     console.log(req.body);
     passport.authenticate('local', function(err, user, info) {
+        console.log(user)
         if (err) { return next(err); }
         if (!user) { res.status(403).send("Wrong username or password"); } else {
             req.logIn(user, function(err) {

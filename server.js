@@ -63,7 +63,14 @@ app.get('/logout', function(req, res) {
 
 })
 
+app.get("/userprofile", NotAuthenticated, function(req, res) {
+    console.log('geia')
+    res.sendFile(path.join(__dirname + "/frontend/userprofile.html"));
+
+})
+
 app.post('/uploadHar', NotAuthenticated, apis.uploadHar);
 app.post('/login', authentication.login);
 app.post("/register", authentication.register);
+app.post("/userprofile", NotAuthenticated, apis.updateUser);
 app.listen(port, '0.0.0.0') //To run on all available interfaces
