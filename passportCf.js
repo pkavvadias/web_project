@@ -86,6 +86,12 @@ function NotAuthenticated(req, res, next) {
     }
     res.redirect("./login");
 }
+function isAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.username == "admin") {
+        return next();
+    }
+    res.redirect("./login");
+}
 
 const login = (req, res, next) => {
     console.log(req.body);
@@ -159,6 +165,7 @@ module.exports = {
     initialize,
     Authenticated,
     NotAuthenticated,
+    isAdmin,
     login,
     register,
 }
