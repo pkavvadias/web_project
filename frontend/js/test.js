@@ -63,6 +63,9 @@ document.getElementById('myFile').addEventListener('change', function selectedFi
                 ip = parsed.log.entries[i].serverIPAddress;
                 temp = ip.replace("[","");
                 temp2=temp.replace("]","");//Quick fix for ipv6
+                if (contentType == null || contentType == ''){
+                    contentType = "text/html"
+                }
                 let modifiedHar = {
                     "startedDateTime": parsed.log.entries[i].startedDateTime,
                     "wait": parsed.log.entries[i].timings.wait,

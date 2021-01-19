@@ -37,3 +37,34 @@ CREATE TABLE IF NOT EXISTS har_data
     REFERENCES users (username)
    
 );
+select * from har_data;
+
+SELECT status, COUNT(*)
+FROM har_data
+GROUP BY status
+
+SELECT method, COUNT(*)
+FROM har_data
+GROUP BY method
+
+SELECT COUNT(username)
+FROM users
+
+SELECT COUNT (DISTINCT domain)
+FROM har_data
+
+SELECT COUNT (DISTINCT isp) FROM har_data
+
+SELECT content_type,starteddatetime,last_modified FROM har_data
+
+truncate table har_data
+
+SELECT DISTINCT content_type FROM har_data
+
+SELECT content_type,starteddatetime,last_modified 
+FROM har_data
+WHERE last_modified IS NOT null
+
+SELECT last_modified
+FROM har_data
+WHERE last_modified IS NOT NULL

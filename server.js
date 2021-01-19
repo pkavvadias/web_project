@@ -73,4 +73,5 @@ app.post('/uploadHar', NotAuthenticated, apis.uploadHar);
 app.post('/login', authentication.login);
 app.post("/register", authentication.register);
 app.post("/userprofile", NotAuthenticated, apis.updateUser);
+app.get("/getadmindata",apis.getAdminData);
 app.listen(port, '0.0.0.0') //To run on all available interfaces
