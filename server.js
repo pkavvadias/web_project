@@ -75,4 +75,8 @@ app.post('/login', authentication.login);
 app.post("/register", authentication.register);
 app.post("/userprofile", NotAuthenticated, apis.updateUser);
 app.get("/getadmindata",isAdmin,apis.getAdminData);
+app.get("/getresponsetimes",isAdmin,apis.getResponseTimes);
+app.get("/getserverips",isAdmin,apis.getServerIPs);
+app.get("/headeranalysis",isAdmin,apis.headerAnalysis);
+app.get("/visitedips",NotAuthenticated,apis.getUserAddresses);
 app.listen(port, '0.0.0.0') //To run on all available interfaces

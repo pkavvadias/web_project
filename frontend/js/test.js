@@ -66,6 +66,7 @@ document.getElementById('myFile').addEventListener('change', function selectedFi
                 if (contentType == null || contentType == ''){
                     contentType = "text/html"
                 }
+                contentType = contentType.split(';')[0];//to clear not needed values
                 let modifiedHar = {
                     "startedDateTime": parsed.log.entries[i].startedDateTime,
                     "wait": parsed.log.entries[i].timings.wait,
