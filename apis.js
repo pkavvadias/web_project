@@ -9,6 +9,7 @@ const uploadHar = (request, response) => {
     //var userIP = request.ip; 
     //console.log(request.user.username);
     var userIP = "85.75.169.61"; //Remove when on server,just for test
+    //var userIP = "79.167.22.79";
     for (i = 0; i < request.body.length; i++) {
         finalJSON = {
             "username_user": request.user.username,
@@ -153,82 +154,104 @@ const getResponseTimes = (request, response) => {
 }
 
 const getServerIPs = (request, response) => {
-    helper.pool.query('SELECT user_ip, serveripaddress, COUNT(*) FROM har_data GROUP BY serveripaddress ORDER BY COUNT(*) DESC', (err, results) => {
+    helper.pool.query('SELECT userip, serveripaddress, COUNT(*) FROM har_data GROUP BY serveripaddress,userip ORDER BY COUNT(*) DESC', (err, results) => {
         response.json(results.rows)
     })
 }
 const headerAnalysis = (request, response) => {
-    var TTL = new Array()
-    helper.pool.query('SELECT content_type,cache_control,expires,last_modified FROM har_data', (err, results) => {
-        items = results.rows
-        for (x in items) {
-            var TTLJSON = {
-                content_type: '',
-                time: ''
-            }
-            if (items[x].cache_control != null && items[x].cache_control.search(/max-age=/) != -1) {
-                var index = items[x].cache_control.search(/max-age=/) //Regex to get max age
-                TTLJSON.content_type = items[x].content_type;
-                var maxage = items[x].cache_control.substring(index + 8).split(',')[0]; //get only max age value
-                TTLJSON.time = maxage;
-                TTL.push(TTLJSON)
-            } else if (items[x].expires != 'null' && items[x].last_modified != 'null') {
-                TTLJSON.content_type = items[x].content_type;
-                var expire = new Date(items[x].expires).getTime();
-                var lastmodif = new Date(items[x].last_modified).getTime();
-                TTLJSON.time = ((expire - lastmodif))
-                TTL.push(TTLJSON)
+    //var TTL = new Array();
+    var ISPs = new Array();
+    var final = new Object();
+    helper.pool.query('SELECT content_type,cache_control,expires,last_modified,isp FROM har_data', (err, results) => {
+        items = results.rows;
+        for (x in items){
+            ISPs.push(items[x].isp)
+        }
+        ISPs = [...new Set(ISPs)];
+        for (y in ISPs) {
+            final[ISPs[y]] = new Object(); 
+            final[ISPs[y]].ttl = new Array();
+            for (x in items) {
+                var TTLJSON = {
+                    content_type: '',
+                    time: ''
+                }
+                if (items[x].cache_control != null && items[x].cache_control.search(/max-age=/) != -1 && items[x].isp == ISPs[y]) {
+                    var index = items[x].cache_control.search(/max-age=/) //Regex to get max age
+                    TTLJSON.content_type = items[x].content_type;
+                    var maxage = items[x].cache_control.substring(index + 8).split(',')[0]; //get only max age value
+                    TTLJSON.time = maxage;
+                    //TTL.push(TTLJSON)
+                    final[ISPs[y]].ttl.push(TTLJSON);;
+                } else if (items[x].expires != 'null' && items[x].last_modified != 'null' && items[x].isp == ISPs[y]) {
+                    TTLJSON.content_type = items[x].content_type;
+                    var expire = new Date(items[x].expires).getTime();
+                    var lastmodif = new Date(items[x].last_modified).getTime();
+                    TTLJSON.time = ((expire - lastmodif))
+                    //TTL.push(TTLJSON)                    
+                    final[ISPs[y]].ttl.push(TTLJSON);;
+                }
             }
         }
-        helper.pool.query('SELECT content_type,COUNT(content_type) FROM har_data GROUP BY content_type', (err, results) => {
+        helper.pool.query('SELECT content_type,COUNT(content_type),isp FROM har_data GROUP BY content_type,isp', (err, results) => {
             var types = results.rows;
-            helper.pool.query("SELECT COUNT(cache_control),content_type FROM har_data WHERE cache_control LIKE '%min-fresh%' GROUP BY content_type", (err, results) => {
+            helper.pool.query("SELECT COUNT(cache_control),content_type,isp FROM har_data WHERE cache_control LIKE '%min-fresh%' GROUP BY content_type,isp", (err, results) => {
                 var minfresh = results.rows;
-                helper.pool.query("SELECT COUNT(cache_control),content_type FROM har_data WHERE cache_control LIKE '%max-stale%' GROUP BY content_type", (err, results) => {
+                helper.pool.query("SELECT COUNT(cache_control),content_type,isp FROM har_data WHERE cache_control LIKE '%max-stale%' GROUP BY content_type,isp", (err, results) => {
                     var max_stale = results.rows;
-                    var percentage = new Array();
-                    for (x in types) {
-                        var percentageJSON = {
-                            content_type: '0',
-                            minfresh: '0',
-                            maxstale: '0'
-                        }
-                        percentageJSON.content_type = types[x].content_type;
-                        for (y in minfresh) {
-                            if (minfresh[y] != null && minfresh[y].content_type == types[x].content_type) {
-                                percentageJSON.minfresh = (minfresh[y].count / types[x].count) * 100;
-                            }
-                        }
-                        for (z in max_stale) {
-                            if (max_stale[y] != null && max_staleh[y].content_type == types[x].content_type) {
-                                percentageJSON.max_stale = (max_stale[y].count / types[x].count) * 100;
-                            }
-                        }
-                        percentage.push(percentageJSON)
-                    }
-                    helper.pool.query('SELECT COUNT(cache_control),content_type FROM har_data WHERE cache_control IS NOT null GROUP BY content_type', (err, results) => {
-                        var cacheability = results.rows;
-                        var cache = new Array();
+                    //var percentage = new Array();
+                    for (w in ISPs) {
+                        final[ISPs[w]].percentages = new Array();
                         for (x in types) {
-                            var cacheabilityJSON = {
+                            var percentageJSON = {
                                 content_type: '0',
-                                percentage: ''
+                                minfresh: '0',
+                                maxstale: '0'
                             }
-                            for (y in cacheability) {
-                                cacheabilityJSON.content_type = types[x].content_type;
-                                if (cacheability[y].content_type == types[x].content_type) {
-                                    cacheabilityJSON.percentage = (cacheability[y].count / types[x].count) * 100;
+                            percentageJSON.content_type = types[x].content_type;
+                            for (y in minfresh) {
+                                if (minfresh[y] != null && minfresh[y].content_type == types[x].content_type && minfresh[y].isp == ISPs[w]) {
+                                    percentageJSON.minfresh = (minfresh[y].count / types[x].count) * 100;
                                 }
                             }
-                            cache.push(cacheabilityJSON)
+                            for (z in max_stale) {
+                                if (max_stale[y] != null && max_staleh[y].content_type == types[x].content_type && max_stale[z].isp == ISPs[w]) {
+                                    percentageJSON.max_stale = (max_stale[y].count / types[x].count) * 100;
+                                }
+                            }
+                            //percentage.push(percentageJSON);
+                            final[ISPs[w]].percentages.push(percentageJSON);
                         }
+                    }
+                    helper.pool.query('SELECT COUNT(cache_control),content_type,isp FROM har_data WHERE cache_control IS NOT null GROUP BY content_type,isp', (err, results) => {
+                        var cacheability = results.rows;
+                        //var cache = new Array();
+                        for (z in ISPs) {
+                            final[ISPs[z]].cache = new Array();
+                            for (x in types) {
+                                var cacheabilityJSON = {
+                                    content_type: '0',
+                                    percentage: ''
+                                }
+                                for (y in cacheability) {
+                                    cacheabilityJSON.content_type = types[x].content_type;
+                                    if (cacheability[y].content_type == types[x].content_type && cacheability[y].isp == ISPs[z]) {
+                                        cacheabilityJSON.percentage = (cacheability[y].count / types[x].count) * 100;
+                                    }
+                                }
+                                //cache.push(cacheabilityJSON)
+                                final[ISPs[z]].cache.push(cacheabilityJSON)
+                            }
+                        }
+                        /*
                         var analysisJSON = {
                                 ttl: TTL,
                                 percentages: percentage,
                                 cached: cache
                             }
                             // console.log(analysisJSON)
-                        response.json(analysisJSON)
+                            */
+                        response.json(final)
                     })
                 })
             })
