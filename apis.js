@@ -50,7 +50,7 @@ const updateUser = (request, response) => {
             if (err) {
                 throw err;
             }
-            bcrypt.compare(request.body.password_old, results.rows[0].password, async (err, isMatch) => {
+            bcrypt.compare(request.body.password_old, results.rows[0].password, async(err, isMatch) => {
                 if (err) {
                     console.log(err);
                 }
@@ -92,7 +92,7 @@ const getAdminData = (request, response) => {
                         ispNumber = results.rows[0].count;
                         helper.pool.query('SELECT content_type,starteddatetime,last_modified FROM har_data', (err, results) => {
                             items = results.rows;
-                            var temp = new Array();//Maybe not needed now?check
+                            var temp = new Array(); //Maybe not needed now?check
                             for (x in items) {
                                 if (items[x].last_modified != 'null') {
                                     items[x].content_type = items[x].content_type.split(';')[0];
@@ -153,7 +153,7 @@ const getResponseTimes = (request, response) => {
 }
 
 const getServerIPs = (request, response) => {
-    helper.pool.query('SELECT serveripaddress, COUNT(*) FROM har_data GROUP BY serveripaddress ORDER BY COUNT(*) DESC', (err, results) => {
+    helper.pool.query('SELECT user_ip, serveripaddress, COUNT(*) FROM har_data GROUP BY serveripaddress ORDER BY COUNT(*) DESC', (err, results) => {
         response.json(results.rows)
     })
 }
@@ -167,13 +167,12 @@ const headerAnalysis = (request, response) => {
                 time: ''
             }
             if (items[x].cache_control != null && items[x].cache_control.search(/max-age=/) != -1) {
-                var index = items[x].cache_control.search(/max-age=/)//Regex to get max age
+                var index = items[x].cache_control.search(/max-age=/) //Regex to get max age
                 TTLJSON.content_type = items[x].content_type;
-                var maxage = items[x].cache_control.substring(index + 8).split(',')[0];//get only max age value
+                var maxage = items[x].cache_control.substring(index + 8).split(',')[0]; //get only max age value
                 TTLJSON.time = maxage;
                 TTL.push(TTLJSON)
-            }
-            else if (items[x].expires != 'null' && items[x].last_modified != 'null') {
+            } else if (items[x].expires != 'null' && items[x].last_modified != 'null') {
                 TTLJSON.content_type = items[x].content_type;
                 var expire = new Date(items[x].expires).getTime();
                 var lastmodif = new Date(items[x].last_modified).getTime();
@@ -224,11 +223,11 @@ const headerAnalysis = (request, response) => {
                             cache.push(cacheabilityJSON)
                         }
                         var analysisJSON = {
-                            ttl: TTL,
-                            percentages: percentage,
-                            cached: cache
-                        }
-                        console.log(analysisJSON)
+                                ttl: TTL,
+                                percentages: percentage,
+                                cached: cache
+                            }
+                            // console.log(analysisJSON)
                         response.json(analysisJSON)
                     })
                 })
