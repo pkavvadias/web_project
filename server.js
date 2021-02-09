@@ -38,7 +38,8 @@ app.use(bodyParser.json({ limit: '100mb' }));
 
 
 app.get('/', function(req, res) {
-    res.send('Hello World!')
+    // res.send('Hello World!')
+    res.sendFile(path.join(__dirname + "/frontend/continue.html"));
 })
 
 app.get("/register", Authenticated, function(req, res) {
