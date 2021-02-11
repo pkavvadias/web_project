@@ -4,7 +4,7 @@ function heatmapUser() {
     var xhr = new XMLHttpRequest();
 
 
-    xhr.open("GET", "http://127.0.0.1:3000/visitedips", true);
+    xhr.open("GET", "http://localhost:3000/visitedips", true);
 
     //xhr.setRequestHeader('Content-Type', 'json');
     xhr.responseType = 'json';
