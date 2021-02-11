@@ -1,0 +1,30 @@
+.invalid_love {
+    border: 1px solid rgb(207, 0, 0);
+    ;
+}
+
+.valid_hate {
+    box-shadow: 0 0 1px 1px rgb(22, 255, 1);
+}
+
+.love_no {
+    display: none;
+}
+
+.love_yes {
+    display: block;
+    font-size: 13px;
+    color: rgb(207, 0, 0);
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+
+.invalid {
+    color: red;
+}
+
+.invalid:before {
+    position: relative;
+    left: -35px;
+    content: "✖";
+}
