@@ -1,15 +1,32 @@
 
-function check_password() {
-  console.log(document.getElementById("pwd").value);
+// function check_password() {
+//   console.log(document.getElementById("pwd").value);
 
-  var password = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
-  if (password.test(document.getElementById('pwd').value) == true) {
-    document.getElementById('pwd').setCustomValidity('');
+//   var password = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
+//   if (password.test(document.getElementById('pwd').value) == true) {
+//     document.getElementById('pwd').setCustomValidity('');
+//   }
+//   else {
+//     document.getElementById('pwd').setCustomValidity('Must contain at least one number, one uppercase letter, one special character and at least 8 or more characters');
+//   }
+// }
+
+
+function password_matching() {
+  var password = document.getElementById('pwd');
+  var password_cf = document.getElementById('pwd_cf');
+  if (password.value != password_cf.value) {
+    password_cf.setCustomValidity('You must put the same password.');
+    return false;
+
   }
+
   else {
-    document.getElementById('pwd').setCustomValidity('Must contain at least one number, one uppercase letter, one special character and at least 8 or more characters');
+    password_cf.setCustomValidity('');
+    return true;
   }
 }
+
 
 var error = false;
 
@@ -34,7 +51,7 @@ $(document).ready(function () {
       error: function (xhr, status, error) {
 
         if (xhr.responseText.indexOf('<body') != -1) {
-          $(window).attr('location','http://localhost:3000/login')
+          $(window).attr('location', 'http://localhost:3000/login')
           // a 302 redirection happens
         } else {
           var errorMessage = xhr.responseText
@@ -56,25 +73,12 @@ $(document).ready(function () {
 
 
 
-function password_matching() {
-  var password = document.getElementById('pwd');
-  var password_cf = document.getElementById('pwd_cf');
-  if (password.value != password_cf.value) {
-    password_cf.setCustomValidity('You must put the same password.');
-
-  }
-
-  else {
-    password_cf.setCustomValidity('');
-
-  }
-}
 
 
 
 
-document.getElementById('pwd').addEventListener('keyup', check_password);
-document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
+// document.getElementById('pwd').addEventListener('keyup', check_password);
+// document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
 
 
 (function submit_listener() {
@@ -87,15 +91,60 @@ document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
 
     const username = document.getElementById('username')
     const input = document.getElementById('email');
+    const password = document.getElementById('pwd');
+    const password_cf = document.getElementById('pwd_cf');
     const nice = document.getElementById('nice');
+
     // const log = document.getElementById('log')
     console.log(input);
     // input.addEventListener('invalid', logValue)
 
     username.addEventListener('keyup', function () {
       if (check === true && error === true) {
-        username.classList.remove('ivalid_love');
+        username.classList.remove('invalid_love');
         document.getElementById("error").remove();
+      }
+    });
+
+    password.addEventListener('keyup', function () {
+      if (check === true) {
+        var val = password.checkValidity();
+        console.log(val);
+        if (val !== true) {
+          password.classList.add('invalid_love');
+          password.classList.remove('valid_hate');
+          nice_p.classList.add('love_yes');
+          nice_p.classList.remove('love_no');
+
+          console.log(5);
+        } else {
+          password.classList.add('valid_hate');
+          password.classList.remove('invalid_love');
+          nice_p.classList.remove('love_yes');
+          nice_p.classList.add('love_no');
+        };
+      }
+    });
+
+    password_cf.addEventListener('keyup', function () {
+      console.log(555)
+      if (check === true) {
+        var ans = password_matching();
+        console.log(ans)
+        if (ans !== true) {
+          password_cf.classList.add('invalid_love');
+          nice_pp.classList.add('love_yes');
+          nice_pp.classList.remove('love_no');
+          password_cf.classList.remove('valid_hate');
+          console.log(5);
+        } else {
+          console.log(666)
+          password_cf.classList.add('valid_hate');
+          nice_pp.classList.add('love_no');
+          nice_pp.classList.remove('love_yes');
+          password_cf.classList.remove('invalid_love');
+        };
+        
       }
     });
 
@@ -111,9 +160,9 @@ document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
           console.log(5);
         } else {
           input.classList.add('valid_hate');
+          nice.classList.add('love_no');
           nice.classList.remove('love_yes');
           input.classList.remove('invalid_love');
-          nice.classList.add('love_no');
         };
       }
     });
@@ -127,6 +176,12 @@ document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
         input.classList.remove('valid_hate');
         nice.classList.remove('love_yes');
         nice.classList.add('love_no');
+        password.classList.remove('valid_hate');
+        nice_p.classList.remove('love_yes');
+        nice_p.classList.add('love_no');
+        password_cf.classList.remove('valid_hate');
+        nice_pp.classList.remove('love_yes');
+        nice_pp.classList.add('love_no');
         form.classList.add('was-validated');
         check = false;
       }, false);

@@ -56,13 +56,34 @@
                     </div>
 
                     <div class="wrap-input m-b-16">
-                        <input class="input form-control" id="pwd" type="password" name="password"
+                        <input class="input form-control" id="pwd" type="password" name="password" minlength="8"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                             placeholder="Your Password" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Password must contain at least 8 characters, including Uppercase, a number and a special
+                            character
+                        </div>
+                        <div class="love_no" id="nice_p">
+                            Password must contain at least 8 characters, including Uppercase, a number and a special
+                            character
+                        </div>
                     </div>
 
                     <div class="wrap-input m-b-16">
                         <input class="input form-control" id="pwd_cf" type="password" name="confirm_pass"
                             placeholder="Retype your password" autocomplete="off" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Password input does not match
+                        </div>
+                        <div class="love_no" id="nice_pp">
+                            Password input does not match
+                        </div>
                     </div>
                     <!--	<div class="m-l-4">
 							<input type="checkbox">
@@ -92,7 +113,7 @@
 
 
 
-    
+
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script> -->
