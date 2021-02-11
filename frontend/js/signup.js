@@ -11,6 +11,48 @@ function check_password() {
   }
 }
 
+var error = false;
+
+$(document).ready(function () {
+  $('form').submit(function (event) {
+    var formData = {
+      'username': $('input[name=username]').val(),
+      'email': $('input[name=email]').val(),
+      'password': $('input[name=password]').val()
+    };
+
+    // process the form
+    $.ajax({
+      type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+      url: '/register', // the url where we want to POST
+      data: formData, // our data object
+      dataType: 'json', // what type of data do we expect back from the server
+      encode: true,
+      success: function (returnData) {
+        var res = JSON.parse(returnData);
+      },
+      error: function (xhr, status, error) {
+
+        if (xhr.responseText.indexOf('<body') != -1) {
+          $(window).attr('location','http://localhost:3000/login')
+          // a 302 redirection happens
+        } else {
+          var errorMessage = xhr.responseText
+          error = true;
+          $('form').removeClass('was-validated');
+          $('#username').removeClass('valid_hate');
+          $('#username').addClass('invalid_love'); // add the error class to show red input
+          $('#name-group').append('<div id="error" class="love_yes">' + xhr.responseText + '</div>'); // add the actual error message under our input
+
+          alert('Error - ' + errorMessage);
+        }
+      }
+    })
+    // stop the form from submitting the normal way and refreshing the page
+    event.preventDefault();
+  });
+});
+
 
 
 
@@ -43,12 +85,19 @@ document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
     var inputs = document.getElementsByClassName('input form-control');
     var check = true;
 
-    // const input = document.getElementById('email')
+    const username = document.getElementById('username')
     const input = document.getElementById('email');
     const nice = document.getElementById('nice');
     // const log = document.getElementById('log')
     console.log(input);
     // input.addEventListener('invalid', logValue)
+
+    username.addEventListener('keyup', function () {
+      if (check === true && error === true) {
+        username.classList.remove('ivalid_love');
+        document.getElementById("error").remove();
+      }
+    });
 
     input.addEventListener('keyup', function () {
       if (check === true) {
@@ -57,10 +106,13 @@ document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
         if (val !== true) {
           input.classList.add('invalid_love');
           nice.classList.add('love_yes');
+          nice.classList.remove('love_no');
+          input.classList.remove('valid_hate');
           console.log(5);
         } else {
           input.classList.add('valid_hate');
           nice.classList.remove('love_yes');
+          input.classList.remove('invalid_love');
           nice.classList.add('love_no');
         };
       }

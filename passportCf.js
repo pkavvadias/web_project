@@ -95,11 +95,11 @@ function isAdmin(req, res, next) {
 
 const login = (req, res, next) => {
     console.log(req.body);
-    passport.authenticate('local', function(err, user, info) {
+    passport.authenticate('local', function (err, user, info) {
         console.log(user)
         if (err) { return next(err); }
         if (!user) { res.status(403).send("Wrong username or password"); } else {
-            req.logIn(user, function(err) {
+            req.logIn(user, function (err) {
                 if (err) { return next(err); }
                 res.redirect("./dashboard");
             });
@@ -110,7 +110,7 @@ const login = (req, res, next) => {
 
 
 async function register(req, res) {
-    let { username, email, password, password_conf } = req.body;
+    let { username, email, password} = req.body;
     console.log({
         username,
         email,
@@ -124,20 +124,22 @@ async function register(req, res) {
     await helper.pool.query(
         'SELECT * FROM users WHERE username = $1', [username],
         (err, results) => {
+            // console.log(err);
+            // console.log(results);
             if (err) {
-                throw err;
+                return console.error('Error executing query', err.stack);
             }
 
-            console.log(results.rows)
-                //} catch (err) {
-                //  console.log('failed to connect', err);
+            // console.log(results.rows);
+            //} catch (err) {
+            // console.log('failed to connect', err);
 
 
             if (results.rows.length > 0) {
                 console.log("Uparxei xristis");
                 // req.flash('error', "")
                 //res.redirect('./login')
-                res.status(400).send('User is already registered. Proceed to log in or create new user.');
+                res.status(400).send('User already exists');
                 // res.sendFile(path.join(__dirname + "/frontend/login.html"));
             } else {
                 console.log("Den uparxei xristis");
@@ -149,7 +151,7 @@ async function register(req, res) {
                         }
                         console.log(results.rows);
                         //req.flash('success_msg', 'Registered!!!! Log in now!');
-                        res.redirect("./login")
+                        res.redirect("http://localhost:3000/login")
 
                     }
                 );
