@@ -2,21 +2,22 @@ function HTTPAnalysis() {
 
     var xhr = new XMLHttpRequest();
 
-
-    xhr.open("GET", "http://127.0.0.1:3000/headeranalysis", true);
+    xhr.open("GET", "http://localhost:3000/headeranalysis", true);
 
     //xhr.setRequestHeader('Content-Type', 'json');
     xhr.responseType = 'json';
-    xhr.send();
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var x = xhr.response;
-            console.log(x.ttl);
-
-            var labelsTTL = x.ttl.map(function(e) {
+            for (a in x) {
+                x_new = x[a];
+            }
+            console.log(x_new)
+            var labelsTTL = x_new.ttl.map(function(e) {
                 return e.content_type;
             });
-            var valuesTTL = x.ttl.map(function(e) {
+            var valuesTTL = x_new.ttl.map(function(e) {
                 var mins = e.time / 60000;
                 var hrs = mins / 60;
                 var days = hrs / 24;
@@ -48,13 +49,13 @@ function HTTPAnalysis() {
                             display: false,
                             barPercentage: 1.3,
                             ticks: {
-                                max: 100,
+                                max: valuesTTL.length - 1,
                             }
                         }, {
                             display: true,
                             ticks: {
                                 autoSkip: false,
-                                max: 50,
+                                max: labelsTTL.length - 1,
                             }
                         }],
                         yAxes: [{
@@ -79,6 +80,7 @@ function HTTPAnalysis() {
             })
         }
     }
+    xhr.send();
 }
 
 
@@ -86,7 +88,7 @@ function flow() {
     var xhr = new XMLHttpRequest();
 
 
-    xhr.open("GET", "http://127.0.0.1:3000/getserverips", true);
+    xhr.open("GET", "http://localhost:3000/getserverips", true);
 
     //xhr.setRequestHeader('Content-Type', 'json');
     xhr.responseType = 'json';
@@ -153,4 +155,4 @@ function flow() {
     }
 }
 document.addEventListener('DOMContentLoaded', HTTPAnalysis);
-document.addEventListener('DOMContentLoaded', flow);
+//document.addEventListener('DOMContentLoaded', flow);

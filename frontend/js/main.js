@@ -8,7 +8,7 @@ function Responses() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/login", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             console.log('mainjs');
             if (xhr.status == 403) {
@@ -71,4 +71,4 @@ const sendHttpRequest = (method, url, data) => {
 //     });
 // };
 
-module.exports = {sendHttpRequest};
+exports = { sendHttpRequest };

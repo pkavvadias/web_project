@@ -4,14 +4,14 @@
      var xhr = new XMLHttpRequest();
 
 
-     xhr.open("GET", "http://127.0.0.1:3000/getadmindata", true);
+     xhr.open("GET", "http://localhost:3000/getadmindata", true);
 
      //xhr.setRequestHeader('Content-Type', 'json');
      xhr.responseType = 'json';
 
      xhr.onload = function() {
          var x = xhr.response;
-
+         console.log(x)
          console.log((x['users']))
          console.log(x['methodcount'])
          console.log(x['statuscount'])
