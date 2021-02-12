@@ -51,14 +51,29 @@ const updateUser = (request, response) => {
             if (err) {
                 throw err;
             }
+
+            if (request.body.password_old === "") {
+                request.body.password_old = request.body.password_user;
+            }
             bcrypt.compare(request.body.password_old, results.rows[0].password, async(err, isMatch) => {
                 if (err) {
                     console.log(err);
                 }
                 if (isMatch) {
                     console.log("BCRYPT");
-                    let hashedPassword = await bcrypt.hash(request.body.password, 10);
-                    console.log(hashedPassword)
+                    // let hashedPassword = await bcrypt.hash(request.body.password, 10);
+                    // console.log(hashedPassword)
+                    if (request.body.username === "") {
+                        request.body.username = request.user.username;
+
+                    }
+                    var hashedPassword = 0;
+                    if (request.body.password === "") {
+                        hashedPassword = await bcrypt.hash(request.body.password_user, 10);;
+                    } else {
+                        hashedPassword = await bcrypt.hash(request.body.password, 10);
+                    }
+
                     helper.pool.query(
                         'UPDATE users SET username=$1, password=$2 WHERE username=$3', [request.body.username, hashedPassword, request.user.username],
                         (err, results) => {
@@ -164,12 +179,12 @@ const headerAnalysis = (request, response) => {
     var final = new Object();
     helper.pool.query('SELECT content_type,cache_control,expires,last_modified,isp FROM har_data', (err, results) => {
         items = results.rows;
-        for (x in items){
+        for (x in items) {
             ISPs.push(items[x].isp)
         }
         ISPs = [...new Set(ISPs)];
         for (y in ISPs) {
-            final[ISPs[y]] = new Object(); 
+            final[ISPs[y]] = new Object();
             final[ISPs[y]].ttl = new Array();
             for (x in items) {
                 var TTLJSON = {
@@ -188,7 +203,7 @@ const headerAnalysis = (request, response) => {
                     var expire = new Date(items[x].expires).getTime();
                     var lastmodif = new Date(items[x].last_modified).getTime();
                     TTLJSON.time = ((expire - lastmodif))
-                    //TTL.push(TTLJSON)                    
+                        //TTL.push(TTLJSON)                    
                     final[ISPs[y]].ttl.push(TTLJSON);;
                 }
             }

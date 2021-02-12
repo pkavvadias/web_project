@@ -90,8 +90,11 @@ function heatmapUser() {
                     1.0: 'red'
                 }
             }).addTo(map);
+
         }
 
     }
 }
-document.addEventListener('DOMContentLoaded', heatmapUser);
+//var button = document.getElementById("statistics")
+
+//button.addEventListener('click', heatmapUser);

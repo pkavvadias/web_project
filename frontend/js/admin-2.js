@@ -121,4 +121,4 @@ function ResponseTimes() {
         }
         xhr.send();
     }
-    document.addEventListener('DOMContentLoaded', ResponseTimes);
+    document.addEventListener('DOMContentLoaded', ResponseTimes)

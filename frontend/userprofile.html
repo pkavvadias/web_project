@@ -14,18 +14,38 @@
 </head>
 
 <body>
-    <form id="UserChanges" method="POST" action=/userprofile>
-
+    <div class="wrapper-update">
         <div>
-            <input type="text" name="username" id="username" placeholder="New Username">
+            <button class="update-form-btn p-t-25 m-r-10" onclick="showForms(0);">Change your Username</button>
         </div>
 
         <div>
-            <input type="password" id="pwd_old" placeholder="Old Password">
+            <button class="update-form-btn p-t-25" onclick="showForms(1);">Change your Password</button>
         </div>
 
-        <div>
-            <input type="password" id="pwd" placeholder="New Password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">
+    </div>
+
+    <form id="ChangeUsername" class="needs-validation" method="POST" action=/userprofile>
+
+        <div class="wrap-input-update">
+            <input class="input form-control  m-t-16  m-b-16" type="text" id="username" name="username" placeholder="New Username" required>
+        </div>
+
+        <div class="wrap-input-update ">
+            <input class="input form-control m-t-16  m-b-16 " type="password" id="pwd_old" placeholder="Type your Password">
+        </div>
+
+    </form>
+
+
+    <form id="ChangePassword" class="needs-validation" method="POST" action=/userprofile>
+
+        <div class="wrap-input-update ">
+            <input class="input form-control m-t-16  m-b-16" type="password" id="pwd_old1" placeholder="Old Password">
+        </div>
+
+        <div class="wrap-input-update  ">
+            <input class="input form-control m-t-16  m-b-16" type="password" id="pwd" placeholder="New Password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -37,8 +57,8 @@
             </div>
         </div>
 
-        <div>
-            <input type="password" id="pwd_cf" placeholder="Retype your new Password">
+        <div class="wrap-input-update  ">
+            <input class="input form-control m-t-16  m-b-16" type="password" id="pwd_cf" placeholder="Retype your new Password">
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -51,7 +71,11 @@
         </div>
 
     </form>
-    <button id="submit_prof" type="submit" onclick="Update();">Submit</button>
+
+    <div>
+        <button id="submit_prof" type="submit" class="update-submit-btn m-t-16" onclick="Update();">Submit</button>
+    </div>
+
 </body>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

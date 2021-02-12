@@ -34,6 +34,6 @@ CREATE TABLE IF NOT EXISTS har_data
     latitude_city  VARCHAR,
     longitude_city VARCHAR,
     FOREIGN KEY (username_user)
-    REFERENCES users (username)
+    REFERENCES users (username) ON UPDATE CASCADE ON DELETE CASCADE
    
 );
