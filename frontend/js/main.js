@@ -71,4 +71,8 @@ const sendHttpRequest = (method, url, data) => {
 //     });
 // };
 
+<<<<<<< HEAD
 exports = { sendHttpRequest };
+=======
+exports = {sendHttpRequest};
+>>>>>>> fad0415124948c15fb34dac00450b6a433be49f1

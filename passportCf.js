@@ -110,7 +110,7 @@ const login = (req, res, next) => {
 
 
 async function register(req, res) {
-    let { username, email, password} = req.body;
+    let { username, email, password } = req.body;
     console.log({
         username,
         email,
@@ -120,46 +120,60 @@ async function register(req, res) {
     let hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
 
+    var user = false;
+    var ema = false;
 
-    await helper.pool.query(
-        'SELECT * FROM users WHERE username = $1', [username],
-        (err, results) => {
-            // console.log(err);
-            // console.log(results);
-            if (err) {
-                return console.error('Error executing query', err.stack);
-            }
+    try {
+        const user_response = await helper.pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const email_response = await helper.pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-            // console.log(results.rows);
-            //} catch (err) {
-            // console.log('failed to connect', err);
+        if (user_response.rows.length > 0) {
+            console.log("Uparxei xristis user");
+            user = true;
 
-
-            if (results.rows.length > 0) {
-                console.log("Uparxei xristis");
-                // req.flash('error', "")
-                //res.redirect('./login')
-                res.status(400).send('User already exists');
-                // res.sendFile(path.join(__dirname + "/frontend/login.html"));
-            } else {
-                console.log("Den uparxei xristis");
-                helper.pool.query(
-                    'INSERT INTO  users VALUES ($1, $2, $3) RETURNING username, password', [username, email, hashedPassword],
-                    (err, results) => {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log(results.rows);
-                        //req.flash('success_msg', 'Registered!!!! Log in now!');
-                        res.redirect("http://localhost:3000/login")
-
-                    }
-                );
-            }
+        } else {
+            user = false;
+            console.log("Den uparxei xristis user");
         }
 
+        if (email_response.rows.length > 0) {
+            console.log("Uparxei email");
+            ema = true;
+            
+        } else {
+            ema = false;
+            console.log("Den uparxei email");
 
-    );
+        }
+
+        console.log(ema, user)
+        if (user === true && ema === false) {
+            console.log("user")
+            res.status(400).send({ "user": true, "email": false });
+        } else if (ema === true && user === false) {
+            console.log("email")
+            res.status(400).send({ "user": false, "email": true });
+        }
+        else if (user === true && ema === true) {
+            console.log("both")
+            res.status(400).send({ "user": true, "email": true });
+        } else {
+            console.log(12345)
+            helper.pool.query(
+                'INSERT INTO  users VALUES ($1, $2, $3) RETURNING username, password', [username, email, hashedPassword],
+                (err, results) => {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log(results.rows);
+                    res.status(200).send({"url":"http://localhost:3000/login"});
+                }
+            );
+
+        }
+    } catch (error) {
+        return console.error('Error executing query', err.stack);
+    }
 
 }
 
