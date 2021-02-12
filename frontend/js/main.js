@@ -71,4 +71,4 @@ const sendHttpRequest = (method, url, data) => {
 //     });
 // };
 
-exports = {sendHttpRequest};
+exports = { sendHttpRequest };
