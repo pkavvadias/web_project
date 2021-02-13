@@ -179,17 +179,64 @@ function ResponseTimes() {
                 var opt = document.createElement("option");
                 opt.text = methods[x];
                 selectTypes.add(opt);
-            }            
+            }
+            /*            
             var color = Chart.helpers.color;
-            var barChartData = {
+            var lineChartData = {
                 labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
                     '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
                 datasets: []
             };
+            */
             var ctx = document.getElementById('myChart6').getContext('2d');
+            var config = {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
+                    '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+                    datasets: [{label: 'Response Times Dataset',
+                    data: [],
+					fill: false,}]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Chart.js Line Chart'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Hours'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Response Times'
+                            }
+                        }
+                    }
+                }
+            };
+            window.myBar = new Chart(ctx, config);
+            /*
             window.myBar = new Chart(ctx, {
-                type: 'bar',
-                data: barChartData,
+                type: 'line',
+                data: lineChartData,
                 options: {
                     responsive: true,
                     plugins: {
@@ -210,13 +257,14 @@ function ResponseTimes() {
                     }
                 }
             });
+            */
             $('select').selectpicker();
             $('#ctype,#dates,#methods,#isp').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                 var ctypeValues = $('#ctype').val();
                 var datesValues = $('#dates').val();
                 var methodsValues = $('#methods').val();
-                var ispValues = $('#isps').val();
-                updateChart(window.mybar,barChartData,data, ctypeValues, datesValues, methodsValues, ispValues);
+                var ispValues = $('#isp').val();
+                updateChart(window.myBar,config,data, ctypeValues, datesValues, methodsValues, ispValues);
             });
 
         };
@@ -226,6 +274,74 @@ function ResponseTimes() {
     xhr.send();
 }
 
-function updateChart(chart,data,dataset,ctype,dates,methods,isps){
+function updateChart(chart,config,dataset,ctype,dates,methods,isps){
+    const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+    var chartArray = new Array(24);
+    for (x in dates){
+        if(dates[x]=="Sunday"){dates[x]=0}
+        else if(dates[x]=="Monday"){dates[x]=1}
+        else if(dates[x]=="Tuesday"){dates[x]=2}
+        else if(dates[x]=="Wednesday"){dates[x]=3}
+        else if(dates[x]=="Thursday"){dates[x]=4}
+        else if(dates[x]=="Friday"){dates[x]=5}
+        else if(dates[x]=="Saturday"){dates[x]=6}
+    }
+
+    var finaldata = new Array();
+    if(ctype.length!=0&&dates.length!=0&&methods.length != 0 &&isps.length != 0){   
+        for (y in ctype){
+            for(x in dataset){
+                if(dataset[x].content_type==ctype[y]){
+                    for (z in dates){
+                        if(dates[z]==(new Date(dataset[x].starteddatetime)).getDay()){
+                            for (k in isps){
+                                if( isps[k] == dataset[x].isp){
+                                    for (i in methods){
+                                        if (methods[i] == dataset[x].method){
+                                            finaldata.push(dataset[x])
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        var dataJSON = new Object();
+    for (var i=0;i<24;i++){
+        dataJSON[i]=new Array();
+    }
+    for (x in finaldata){
+        hour = new Date (finaldata[x].starteddatetime).getHours();
+        dataJSON[hour].push(parseFloat(finaldata[x].wait))
+    }
+    for(x in dataJSON){
+        if(dataJSON[x].length!=0){
+            //dataJSON[x] = average(dataJSON[x]);
+            var JS = {
+                x: x,
+                y: average(dataJSON[x])
+            };
+            //chartArray.push(JS);
+            chartArray[x] = JS;
+        }
+    }
+    console.log(chartArray)
+    var newDataset = {
+        label: 'Response Times Dataset',
+        //backgroundColor: newColor,
+        //borderColor: newColor,
+        data: chartArray,
+        fill: true
+    };
+    config.data.datasets.splice(0, 1);//remove old dataset
+    config.data.datasets.push(newDataset);
+	chart.update();
+    }
+    else{
+        config.data.datasets.splice(0, 1);
+        chart.update();
+    }
     
 }
