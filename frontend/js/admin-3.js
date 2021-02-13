@@ -1,3 +1,9 @@
+
+
+
+
+
+
 function HTTPAnalysis() {
 
     var xhr = new XMLHttpRequest();
@@ -7,95 +13,101 @@ function HTTPAnalysis() {
     //xhr.setRequestHeader('Content-Type', 'json');
     xhr.responseType = 'json';
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var x = xhr.response;
-            for (a in x) {
-                x_new = x[a];
+            var data = JSON.parse(x)
+            console.log(data)
+            //var labelsType = data.content_type.map(a => a.content_type)
+            var labelsType = new Array();
+            var days = new Array();
+            var isps = new Array();
+            var methods = new Array();
+            for (x in data) {
+                labelsType.push(data[x].content_type)
+                y = new Date(data[x].starteddatetime)
+                var day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                var whichday = day[y.getDay()]
+                days.push(whichday)
+                isps.push(data[x].isp)
+                methods.push(data[x].method)
             }
-            console.log(x_new)
-            var labelsTTL = x_new.ttl.map(function(e) {
-                return e.content_type;
-            });
-            var valuesTTL = x_new.ttl.map(function(e) {
-                var mins = e.time / 60000;
-                var hrs = mins / 60;
-                var days = hrs / 24;
-                return days;
+            var labelsType = [...new Set(labelsType)]
+            var days = [...new Set(days)]
+            var isps = [...new Set(isps)]
+            var methods = [...new Set(methods)]
+            
+            for (x in labelsType) {
+                selectTypes = document.getElementById("ctype");
+                var opt = document.createElement("option");
+                opt.text = labelsType[x];
+                selectTypes.add(opt);
+            }
+            for (x in days) {
+                selectTypes = document.getElementById("dates");
+                var opt = document.createElement("option");
+                opt.text = days[x];
+                selectTypes.add(opt);
+            }
 
-            });
-
-            var ctx2 = document.getElementById('myChart4').getContext('2d');
-            var BarChart2 = new Chart(ctx2, {
-                // The type of chart we want to create
-                type: 'bar',
-
-                // The data for our dataset
+            var ctx = document.getElementById('myChart6').getContext('2d');
+            var config = {
+                type: 'line',
                 data: {
-                    labels: labelsTTL,
+                    labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
+                        '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
                     datasets: [{
-                        label: 'TTL',
-
-                        data: valuesTTL,
-                        backgroundColor: ["rgb(255, 99, 132)"],
-                        borderColor: ["rgb(255, 99, 132)"],
-                        borderWidth: 1
+                        label: 'Response Times Dataset',
+                        data: [],
+                        fill: false,
                     }]
                 },
                 options: {
-                    scales: {
-                        xAxes: [{
-                            display: false,
-                            barPercentage: 1.3,
-                            ticks: {
-                                max: 400,
-                            }
-                        }, {
+                    responsive: true,
+                    plugins: {
+                        title: {
                             display: true,
-                            ticks: {
-                                autoSkip: false,
-                                max: 400,
+                            text: 'Chart.js Line Chart'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Hours'
                             }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
+                        },
+                        y: {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Response Times'
                             }
-                        }]
+                        }
                     }
                 }
+            };
+            window.myBar = new Chart(ctx, config);
 
+            $('select').selectpicker();
+            $('#ctype,#dates,#methods,#isp').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                var ctypeValues = $('#ctype').val();
+                var datesValues = $('#dates').val();
+                var methodsValues = $('#methods').val();
+                var ispValues = $('#isp').val();
+                updateChart(window.myBar, config, data, ctypeValues, datesValues, methodsValues, ispValues);
+            });
 
-                /*var Combined = new Array();
-            Combined[0] = ['Content-Type', 'Time'];
-            for (var i = 0; i < valuesTTL.length; i++) {
-                Combined[i + 1] = [valuesTTL[i], labelsTTL[i]];
-            }
-            console.log([Combined])
-            google.charts.load("current", { packages: ["corechart"] });
-            google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable(Combined);
-
-
-                var options = {
-                    title: 'Content Type Histogram',
-                    legend: { position: 'none' },
-                    bar: { groupWidth: "100%" },
-                    histogram: { maxNumBuckets: 10 }
-                };
-
-                var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
-                chart.draw(data, options);
-            }
-
-*/
-
-
-            })
-
-        }
+        };
     }
     xhr.send();
 }
