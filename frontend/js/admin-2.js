@@ -26,7 +26,7 @@ function ResponseTimes() {
                     if (e.method === 'POST') {
 
                     }
-                }
+                })
 
 
 

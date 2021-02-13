@@ -139,7 +139,7 @@ const getAdminData = (request, response) => {
                             for (x in ContentStats) {
                                 AgeJSON = {
                                     type: ContentStats[x].type,
-                                    avg: Number(ContentStats[y].totalAge) / Number(ContentStats[y].occurences)
+                                    avg: Number(ContentStats[x].totalAge) / Number(ContentStats[x].occurences)
                                 }
                                 AverageAge.push(AgeJSON);
                             }

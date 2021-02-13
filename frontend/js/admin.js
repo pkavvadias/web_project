@@ -124,7 +124,7 @@
              var days = hrs / 24;
              return days;
          });
-
+         console.log(x.avgage);
          // Dynamically assign colors
          var color3 = [];
          for (var i in labelsAvgAge) {
