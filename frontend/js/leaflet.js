@@ -71,8 +71,8 @@ function heatmapUser() {
 
             var map = L.map('mapid').setView([37.4043, -122.0748], 12);
 
-            var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            var tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
             var heat = L.heatLayer(addressPoints, {
