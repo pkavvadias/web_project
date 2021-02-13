@@ -81,8 +81,12 @@ function Authenticated(req, res, next) {
 }
 
 function NotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.user.username != "admin") {
         return next();
+    }
+    else if (req.user.username == "admin"){
+        res.status(201).send();
+        res.redirect("./admin")
     }
     res.redirect("./login");
 }
@@ -98,7 +102,14 @@ const login = (req, res, next) => {
     passport.authenticate('local', function (err, user, info) {
         console.log(user)
         if (err) { return next(err); }
-        if (!user) { res.status(403).send("Wrong username or password"); } else {
+        if (!user) { res.status(403).send("Wrong username or password"); } 
+        else if (user.username == "admin"){
+            req.logIn(user, function (err) {
+                if (err) { return next(err); }
+                res.status(201).send()
+            });
+            }
+        else {
             req.logIn(user, function (err) {
                 if (err) { return next(err); }
                 res.redirect("./dashboard");

@@ -15,6 +15,9 @@ function Responses() {
                 alert(xhr.responseText);
             } else if (xhr.status == 200) {
                 window.location.href = "./dashboard"
+            } else if (xhr.status == 201) {
+                console.log("redirect")
+                window.location.href = "./admin"
             }
         }
     };
