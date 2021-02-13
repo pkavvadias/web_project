@@ -17,25 +17,41 @@ function HTTPAnalysis() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var x = xhr.response;
             var data = JSON.parse(x)
-            console.log(data)
+            var ttls = new Array();
+            var percentages = new Array();
+            var cache = new Array();
             //var labelsType = data.content_type.map(a => a.content_type)
             var labelsType = new Array();
-            var days = new Array();
-            var isps = new Array();
-            var methods = new Array();
             for (x in data) {
-                labelsType.push(data[x].content_type)
-                y = new Date(data[x].starteddatetime)
-                var day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                var whichday = day[y.getDay()]
-                days.push(whichday)
-                isps.push(data[x].isp)
-                methods.push(data[x].method)
+                for ( y in data[x].ttl){
+                    TTLJSON = {
+                        isp: x,
+                        contentType: data[x].ttl[y].content_type,
+                        time: data[x].ttl[y].time
+                    }
+                    ttls.push(TTLJSON)
+                } 
+                for ( y in data[x].percentages){
+                    percentagesJSON = {
+                        isp: x,
+                        contentType: data[x].percentages[y].content_type,
+                        minfresh: data[x].percentages[y].minfresh,
+                        maxstale: data[x].percentages[y].maxstale
+                    }
+                    percentages.push(percentagesJSON)
+                }
+                for ( y in data[x].cache){
+                    cacheJSON = {
+                        isp: x,
+                        contentType: data[x].cache[y].content_type,
+                        percentage: data[x].cache[y].percentage
+                    }
+                    cache.push(cacheJSON)
+                }  
+
             }
             var labelsType = [...new Set(labelsType)]
-            var days = [...new Set(days)]
             var isps = [...new Set(isps)]
-            var methods = [...new Set(methods)]
             
             for (x in labelsType) {
                 selectTypes = document.getElementById("ctype");
