@@ -17,13 +17,20 @@
     color: rgb(207, 0, 0);
 }
 
+.love_yes_yes{
+	display: block;
+    text-align: center;
+	font-size: 16px;
+	color: rgb(207, 0, 0);
+}
+
 /* Add a red text color and an "x" when the requirements are wrong */
 
-.invalid {
+.invalid_god {
     color: red;
 }
 
-.invalid:before {
+.invalid_god::before {
     position: relative;
     left: -35px;
     content: "✖";

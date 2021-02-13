@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" type="text/css" href="./css/util.css">
     <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <link rel="stylesheet" type="text/css" href="./css/validation.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
@@ -26,13 +27,20 @@
     <div class="limiter">
         <div class="container-login">
             <div class="wrap-login p-l-50 p-r-50 p-t-62 p-b-30">
-                <form class="login-form validate-form" validate action="/login" method="POST">
-                    <span class="login-form-title p-b-50">
+
+
+
+
+                <form class="needs-validation" novalidate action="/login" method="POST">
+                    <span class="login-form-title p-b-50" id="header">
                         <div id="title">
                             <i class="material-icons lock">lock</i> Login
-
                         </div>
                     </span>
+
+                    <div class="love_no" id="wrong">
+                        The username or password was incorrect
+                    </div>
 
                     <div class="wrap-input  m-b-16">
                         <input class="input" type="text" id="username-user" name="username" placeholder="Username"

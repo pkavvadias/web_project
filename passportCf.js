@@ -84,7 +84,7 @@ function NotAuthenticated(req, res, next) {
     if (req.isAuthenticated() && req.user.username != "admin") {
         return next();
     }
-    else if (req.user.username == "admin"){
+    else if (req.user.username == "admin") {
         res.status(201).send();
         res.redirect("./admin")
     }
@@ -102,13 +102,13 @@ const login = (req, res, next) => {
     passport.authenticate('local', function (err, user, info) {
         console.log(user)
         if (err) { return next(err); }
-        if (!user) { res.status(403).send("Wrong username or password"); } 
-        else if (user.username == "admin"){
+        if (!user) { res.status(403).send("Wrong username or password"); }
+        else if (user.username == "admin") {
             req.logIn(user, function (err) {
                 if (err) { return next(err); }
                 res.status(201).send()
             });
-            }
+        }
         else {
             req.logIn(user, function (err) {
                 if (err) { return next(err); }
@@ -150,7 +150,7 @@ async function register(req, res) {
         if (email_response.rows.length > 0) {
             console.log("Uparxei email");
             ema = true;
-            
+
         } else {
             ema = false;
             console.log("Den uparxei email");
@@ -177,7 +177,7 @@ async function register(req, res) {
                         throw err;
                     }
                     console.log(results.rows);
-                    res.status(200).send({"url":"http://localhost:3000/login"});
+                    res.status(200).send({ "url": "http://localhost:3000/login" });
                 }
             );
 

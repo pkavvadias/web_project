@@ -37,7 +37,7 @@ function post_it() {
 
     // $('form').submit(function (event) {
     if (submited) {
-      
+
       $('#username').removeClass('valid_hate');
       $('#username').removeClass('invalid_love'); // add the error class to show red input
       $('#error1').remove(); // add the actual error message under our input
@@ -122,7 +122,7 @@ window.addEventListener('load', function () {
   var inputs = document.getElementsByClassName('input form-control');
   var check = true;
 
-  const username = document.getElementById('username')
+  const username = document.getElementById('username');
   const input = document.getElementById('email');
   const password = document.getElementById('pwd');
   const password_cf = document.getElementById('pwd_cf');
