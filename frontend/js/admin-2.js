@@ -318,20 +318,19 @@ function updateChart(chart,config,dataset,ctype,dates,methods,isps){
     }
     for(x in dataJSON){
         if(dataJSON[x].length!=0){
-            //dataJSON[x] = average(dataJSON[x]);
             var JS = {
                 x: x,
                 y: average(dataJSON[x])
             };
-            //chartArray.push(JS);
             chartArray[x] = JS;
         }
     }
     console.log(chartArray)
     var newDataset = {
-        label: 'Response Times Dataset',
-        //backgroundColor: newColor,
-        //borderColor: newColor,
+        label: 'Response Time',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        borderColor: 'red',
+        spanGaps: true,
         data: chartArray,
         fill: true
     };
@@ -343,5 +342,4 @@ function updateChart(chart,config,dataset,ctype,dates,methods,isps){
         config.data.datasets.splice(0, 1);
         chart.update();
     }
-    
 }
