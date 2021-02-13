@@ -154,7 +154,6 @@
      }
      xhr.send();
      adminMap();
-     //adminMap();
  }
 
  function adminMap() {
@@ -321,6 +320,8 @@
  }
 
  //document.addEventListener('DOMContentLoaded', basicInf);
+ //document.addEventListener('load', adminMap);
  //document.addEventListener('DOMContentLoaded', adminMap);
  //console.log(JSON.parse(xhr));
  window.onload = basicInf();
+ //window.onload = adminMap();
