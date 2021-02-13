@@ -51,10 +51,13 @@ app.get("/login", Authenticated, function (req, res) {
     res.sendFile(path.join(__dirname + "/frontend/login.html"));
 })
 
+app.get("/admin_3", isAdmin, function (req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/admin_3.html"));
+})
+
 app.get("/admin", isAdmin, function (req, res) {
     res.sendFile(path.join(__dirname + "/frontend/admin.html"));
 })
-
 
 app.get("/dashboard", NotAuthenticated, function (req, res) {
     // Is he really authenticated? True is yes.
