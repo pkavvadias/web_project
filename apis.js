@@ -252,7 +252,7 @@ const headerAnalysis = (request, response) => {
                                 for (y in cacheability) {
                                     cacheabilityJSON.content_type = types[x].content_type;
                                     if (cacheability[y].content_type == types[x].content_type && cacheability[y].isp == ISPs[z]) {
-                                        cacheabilityJSON.percentage = (cacheability[y].count / types[x].count) * 100;
+                                        cacheabilityJSON.percentage = (cacheability[y].count / types[x].count);
                                     }
                                 }
                                 //cache.push(cacheabilityJSON)
