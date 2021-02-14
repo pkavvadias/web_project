@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt")
 
 const uploadHar = (request, response) => {
     var JSONtoInsert = new Array();
-    //var userIP = request.ip; 
-    var userIP = "85.75.169.61"; //Test IP
+    var userIP = request.ip; 
+    //var userIP = "85.75.169.61"; //Test IP
     //var userIP = "79.167.22.79";//Test IP
     for (i = 0; i < request.body.length; i++) {
         finalJSON = {

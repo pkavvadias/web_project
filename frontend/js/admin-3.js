@@ -321,10 +321,6 @@ function updateChart(chart, config, dataset, ctype, isps) {
             return e.x;
         });
 
-
-        console.log(input_3, labelss_1);
-
-
         var newDataset = {
             label: 'TTL Histogram',
             backgroundColor: 'rgba(255, 0, 0, 0.3)',
