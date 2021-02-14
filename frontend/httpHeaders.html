@@ -111,40 +111,42 @@
             <div class="content ">
                 <div class="container-fluid">
 
-                    <p class="text center"> Histogram of TTLs </p>
 
-
-                    <div class="chart-container" style="position: relative; height:400px; width:400px"></div>
-                    <p class="text center" id="title1"> Histogram of TTLs </p>
-                    <select id="ctype" class="selectpicker" multiple data-actions-box="true" title="Select Content Type">
+                    <div class="chart-container " style="position: relative; ">
+                        <p class="h2 text-center m-b-35" id="title1">Histogram of TTLs </p>
+                        <select id="ctype" class="selectpicker" multiple data-actions-box="true" title="Select Content Type">
                     </select>
-                    <select id="isp" class="selectpicker" multiple data-actions-box="true" title="Select ISP">
+                        <select id="isp" class="selectpicker" multiple data-actions-box="true" title="Select ISP">
                     </select>
-                    <div class="chart-container" style="position: relative; height:400px; width:1000px;margin-bottom:100px;">
-                        <canvas id="myChart6"></canvas>
-                    </div>
-
-                    <select id="ctype_1" class="selectpicker" multiple data-actions-box="true" title="Select Content Type">
-                    </select>
-                    <select id="isp_1" class="selectpicker" multiple data-actions-box="true" title="Select ISP">
-                    </select>
-                    <div class="chart-container" style="position: relative; height:400px; width:1000px;margin-bottom:100px;">
-                        <canvas id="myChart7"></canvas>
+                        <div class="chart-container" style="position: relative; height:400px; width:1000px;margin-bottom:400px;">
+                            <canvas id="myChart6"></canvas>
+                        </div>
                     </div>
 
 
-                    <select id="ctype_2" class="selectpicker" multiple data-actions-box="true" title="Select Content Type">
+                    <div class="chart-container  m-t-200" style="position: relative; ">
+                        <p class="h2 text-center  m-b-35" id="title2">Max-Stale Min-Fresh Percentage Graph </p>
+                        <select id="ctype_1" class="selectpicker" multiple data-actions-box="true" title="Select Content Type">
                     </select>
-                    <select id="isp_2" class="selectpicker" multiple data-actions-box="true" title="Select ISP">
+                        <select id="isp_1" class="selectpicker" multiple data-actions-box="true" title="Select ISP">
                     </select>
-                    <div class="chart-container" style="position: relative; height:400px; width:1000px;margin-bottom:100px;">
-                        <canvas id="myChart8"></canvas>
+                        <div class="chart-container " style="position: relative; height:400px; width:1000px;margin-bottom:400px;">
+                            <canvas id="myChart7"></canvas>
+                        </div>
                     </div>
 
-                    <div>
-                        <div id="markers" style="width:840px; height: 600px;"></div>
+
+                    <div class="chart-container " style="position: relative; ">
+                        <p class="h2 text-center  m-b-35" id="title3">Cacheability Percentage Graph </p>
+                        <select id="ctype_2" class="selectpicker" multiple data-actions-box="true" title="Select Content Type">
+                    </select>
+                        <select id="isp_2" class="selectpicker" multiple data-actions-box="true" title="Select ISP">
+                    </select>
+                        <div class="chart-container" style="position: relative; height:400px; width:1000px;margin-bottom:400px;">
+                            <canvas id="myChart8"></canvas>
+                        </div>
+
                     </div>
-                    <div id="chart_div" style="width: 900px; height: 500px;"></div>
 
 
 
