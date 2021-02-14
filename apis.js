@@ -227,12 +227,12 @@ const headerAnalysis = (request, response) => {
                             percentageJSON.content_type = types[x].content_type;
                             for (y in minfresh) {
                                 if (minfresh[y] != null && minfresh[y].content_type == types[x].content_type && minfresh[y].isp == ISPs[w]) {
-                                    percentageJSON.minfresh = (minfresh[y].count / types[x].count) * 100;
+                                    percentageJSON.minfresh = (minfresh[y].count / types[x].count)
                                 }
                             }
                             for (z in max_stale) {
                                 if (max_stale[y] != null && max_staleh[y].content_type == types[x].content_type && max_stale[z].isp == ISPs[w]) {
-                                    percentageJSON.max_stale = (max_stale[y].count / types[x].count) * 100;
+                                    percentageJSON.max_stale = (max_stale[y].count / types[x].count)
                                 }
                             }
                             //percentage.push(percentageJSON);
