@@ -88,14 +88,14 @@ function ResponseTimes() {
                         intersect: true
                     },
                     scales: {
-                        x: {
+                        xAxes: {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Hours'
+                                labelString: 'Hours',
                             }
                         },
-                        y: {
+                        yAxes: {
                             display: true,
                             scaleLabel: {
                                 display: true,
@@ -106,7 +106,6 @@ function ResponseTimes() {
                 }
             };
             window.myBar = new Chart(ctx, config);
-
             $('select').selectpicker();
             $('#ctype,#dates,#methods,#isp').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                 var ctypeValues = $('#ctype').val();
