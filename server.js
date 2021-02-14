@@ -37,46 +37,111 @@ app.use(bodyParser.json({ limit: '100mb' }));
 
 
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     // res.send('Hello World!')
     res.sendFile(path.join(__dirname + "/frontend/continue.html"));
 })
 
-app.get("/register", Authenticated, function (req, res) {
+app.get("/register", Authenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/signup.html"));
 
 })
 
-app.get("/login", Authenticated, function (req, res) {
+app.get("/login", Authenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/login.html"));
 })
 
-app.get("/admin_3", isAdmin, function (req, res) {
-    res.sendFile(path.join(__dirname + "/frontend/admin_3.html"));
-})
-
-app.get("/admin", isAdmin, function (req, res) {
+app.get("/admin", isAdmin, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/admin.html"));
 })
 
-app.get("/dashboard", NotAuthenticated, function (req, res) {
+
+app.get("/dashboard", NotAuthenticated, function(req, res) {
     // Is he really authenticated? True is yes.
     console.log(req.isAuthenticated());
     res.sendFile(path.join(__dirname + "/frontend/dashboard.html"));
 })
 
-app.get('/logout', function (req, res) {
+app.get('/logout', function(req, res) {
     req.logOut();
     //req.flash('success_msg', "Logged Out")
     res.redirect('./login')
 
 })
 
-app.get("/userprofile", NotAuthenticated, function (req, res) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.get("/userprofile", NotAuthenticated, function(req, res) {
     console.log('geia')
     res.sendFile(path.join(__dirname + "/frontend/userprofile.html"));
 
 })
+
+app.get("/basicInfos", isAdmin, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/basicInfos.html"));
+})
+
+app.get("/responseTimes", isAdmin, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/responseTimes.html"));
+})
+
+app.get("/httpHeaders", isAdmin, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/httpHeaders.html"));
+})
+
+app.get("/flowmap", isAdmin, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/flowmap.html"));
+})
+
+
+
 
 app.post('/uploadHar', NotAuthenticated, apis.uploadHar);
 app.post('/login', authentication.login);
