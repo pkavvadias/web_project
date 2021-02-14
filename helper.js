@@ -7,16 +7,6 @@ const pool = new Pool({
     port: 5432,
 })
 var http = require('http');
-//var access_key = 'b694a05e28d302cf008d7229dd58d29d'; //ipstack api key
-//const ipstack = require('ipstack')
-
-async function sleep(ms) {
-    await new Promise((resolve) => setTimeout(resolve, ms));
-}
-//var freegeoip = require('node-freegeoip');
-
-//freegeoip.setUrl('https://freegeoip.app/json/');
-//freegeoip.setUrl('http://ip-api.com/json/');
 
 function getIpInfo(ip, JSONdata) {
 
@@ -71,15 +61,8 @@ function getCurrentDate() {
     return (year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
 }
 
-async function testing() {
-    const res = await pool.query(
-        'SELECT * FROM users ');
-    console.log(res);
-}
-
 module.exports = {
     getIpInfo,
     getCurrentDate,
-    testing,
 }
 module.exports.pool = pool

@@ -1,15 +1,11 @@
 const helper = require('./helper')
 const bcrypt = require("bcrypt")
-const passport = require("passport")
-var https = require('https')
 
 const uploadHar = (request, response) => {
     var JSONtoInsert = new Array();
-    //console.log(request.ip);
     //var userIP = request.ip; 
-    //console.log(request.user.username);
-    var userIP = "85.75.169.61"; //Remove when on server,just for test
-    //var userIP = "79.167.22.79";
+    var userIP = "85.75.169.61"; //Test IP
+    //var userIP = "79.167.22.79";//Test IP
     for (i = 0; i < request.body.length; i++) {
         finalJSON = {
             "username_user": request.user.username,
@@ -53,13 +49,11 @@ const updateUser = (request, response) => {
             if (request.body.password_old === "") {
                 request.body.password_old = request.body.password_user;
             }
-            console.log(request.body.username)
             bcrypt.compare(request.body.password_old, results.rows[0].password, async(err, isMatch) => {
                 if (err) {
                     console.log(err);
                 }
                 if (isMatch) {
-                    console.log("BCRYPT");
                     if (request.body.username === "") {
                         request.body.username = request.user.username;
 
@@ -262,7 +256,6 @@ const getUserAddresses = (request, response) => {
 
 
 const getUserStats = (request, response) => {
-    console.log(request.user.username)
     helper.pool.query("SELECT COUNT(*),username_user, date FROM har_data WHERE username_user=$1  GROUP BY username_user,date ORDER BY date DESC", [request.user.username], (err, results) => {
         if (results.rows[0] == null) {
             stats = {
@@ -284,8 +277,6 @@ const getUserStats = (request, response) => {
 
 
             response.json(stats)
-
-            console.log(stats)
         })
     })
 }

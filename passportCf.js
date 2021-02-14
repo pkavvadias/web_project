@@ -7,15 +7,12 @@ function initialize(passport) {
     console.log("Initialized");
 
     const authenticateUser = (username, password, done) => {
-        console.log(username, password);
         helper.pool.query(
             'SELECT * FROM users WHERE username = $1', [username],
             (err, results) => {
                 if (err) {
                     throw err;
                 }
-
-
                 if (results.rows.length > 0) {
                     // parsing the user to the user const
                     const user = results.rows[0];
@@ -28,7 +25,6 @@ function initialize(passport) {
                             return done(null, user);
                         } else {
                             //incorrect password
-
                             return done(null, false, { message: "Incorrect password." });
                         }
                     });
@@ -52,8 +48,6 @@ function initialize(passport) {
     // to the session as req.session.passport.user = {}. Here for instance, it would be (as we provide
     //   the user username as the key) req.session.passport.user = {username: 'kati'}
     passport.serializeUser((user, done) => {
-        console.log("Session");
-        console.log(user.username);
         done(null, user.email);
     });
 
@@ -98,9 +92,7 @@ function isAdmin(req, res, next) {
 }
 
 const login = (req, res, next) => {
-    console.log(req.body);
     passport.authenticate('local', function(err, user, info) {
-        console.log(user)
         if (err) { return next(err); }
         if (!user) { res.status(403).send("Wrong username or password"); } else if (user.username == "admin") {
             req.logIn(user, function(err) {
@@ -120,14 +112,8 @@ const login = (req, res, next) => {
 
 async function register(req, res) {
     let { username, email, password } = req.body;
-    console.log({
-        username,
-        email,
-        password
-    });
 
     let hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
 
     var user = false;
     var ema = false;
@@ -137,43 +123,33 @@ async function register(req, res) {
         const email_response = await helper.pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
         if (user_response.rows.length > 0) {
-            console.log("Uparxei xristis user");
             user = true;
 
         } else {
             user = false;
-            console.log("Den uparxei xristis user");
         }
 
         if (email_response.rows.length > 0) {
-            console.log("Uparxei email");
             ema = true;
 
         } else {
             ema = false;
-            console.log("Den uparxei email");
 
         }
 
-        console.log(ema, user)
         if (user === true && ema === false) {
-            console.log("user")
             res.status(400).send({ "user": true, "email": false });
         } else if (ema === true && user === false) {
-            console.log("email")
             res.status(400).send({ "user": false, "email": true });
         } else if (user === true && ema === true) {
-            console.log("both")
             res.status(400).send({ "user": true, "email": true });
         } else {
-            console.log(12345)
             helper.pool.query(
                 'INSERT INTO  users VALUES ($1, $2, $3) RETURNING username, password', [username, email, hashedPassword],
                 (err, results) => {
                     if (err) {
                         throw err;
                     }
-                    console.log(results.rows);
                     res.status(200).send({ "url": "http://localhost:3000/login" });
                 }
             );

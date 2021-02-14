@@ -1,13 +1,11 @@
 const helper = require('./helper')
 const express = require('express')
 const bodyParser = require('body-parser')
-const urlencodedParser = bodyParser.urlencoded({ extended: true });
 const apis = require('./apis')
 const cors = require('cors')
 const passport = require('passport')
 const session = require('express-session')
 const path = require('path')
-const bcrypt = require('bcrypt')
 const authentication = require('./passportCf')
 const app = express()
 const port = 3000
@@ -28,15 +26,9 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
-
 app.use(cors())
-
 app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '100mb' }));
-
-
-
-
 
 app.get("/register", Authenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/signup.html"));
@@ -51,9 +43,7 @@ app.get("/admin", isAdmin, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/dashboard-admin.html"));
 })
 
-
 app.get("/dashboard", NotAuthenticated, function(req, res) {
-    console.log(req.isAuthenticated());
     res.sendFile(path.join(__dirname + "/frontend/dashboard-user.html"));
 })
 
@@ -61,12 +51,10 @@ app.get('/logout', function(req, res) {
     req.logOut();
 
     res.redirect('./login')
-
 })
-app.get("/updateuser", NotAuthenticated, function(req, res) {
-    console.log('geia')
-    res.sendFile(path.join(__dirname + "/frontend/userprofile.html"));
 
+app.get("/updateuser", NotAuthenticated, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/userprofile.html"));
 })
 
 app.get("/basicInfos", isAdmin, function(req, res) {
@@ -85,19 +73,13 @@ app.get("/flowmap", isAdmin, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/flowmap.html"));
 })
 
-
 app.get("/userprofile1", NotAuthenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/userprofile1.html"));
 })
 
-
-
 app.get("/heatmap", NotAuthenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/heatmap.html"));
 })
-
-
-
 
 app.post('/uploadHar', NotAuthenticated, apis.uploadHar);
 app.post('/login', authentication.login);
