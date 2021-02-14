@@ -91,6 +91,17 @@ app.get("/flowmap", isAdmin, function(req, res) {
 })
 
 
+app.get("/userprofile1", NotAuthenticated, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/userprofile1.html"));
+})
+
+
+
+app.get("/heatmap", NotAuthenticated, function(req, res) {
+    res.sendFile(path.join(__dirname + "/frontend/heatmap.html"));
+})
+
+
 
 
 app.post('/uploadHar', NotAuthenticated, apis.uploadHar);
@@ -102,4 +113,5 @@ app.get("/getresponsetimes", isAdmin, apis.getResponseTimes);
 app.get("/getserverips", isAdmin, apis.getServerIPs);
 app.get("/headeranalysis", isAdmin, apis.headerAnalysis);
 app.get("/visitedips", NotAuthenticated, apis.getUserAddresses);
+app.get("/getuserstats", NotAuthenticated, apis.getUserStats);
 app.listen(port, '0.0.0.0') //To run on all available interfaces

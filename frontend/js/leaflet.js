@@ -69,7 +69,7 @@ function heatmapUser() {
             //  console.log(addressPoints)
 
 
-            var map = L.map('mapid').setView([37.4043, -122.0748], 12);
+            var map = L.map('map').setView([37.4043, -122.0748], 12);
 
             var tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -77,10 +77,11 @@ function heatmapUser() {
 
             var heat = L.heatLayer(addressPoints, {
                 minOpacity: 1,
-                max: 1000,
+                max: 10000,
                 radius: 20,
                 blur: 20,
                 gradient: {
+                    0.2: 'blue',
                     0.4: '#f23e45',
                     0.50: 'lime',
                     0.70: 'yellow',
@@ -93,6 +94,7 @@ function heatmapUser() {
 
     }
 }
-//var button = document.getElementById("statistics")
 
-//button.addEventListener('click', heatmapUser);
+
+
+window.onload = heatmapUser();
