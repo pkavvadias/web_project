@@ -36,7 +36,6 @@ function showForms(a) {
 
 function password_matching() {
     var password = document.getElementById('pwd');
-    console.log(password.value)
     var password_cf = document.getElementById('pwd_cf');
     if (password.value != password_cf.value) {
         password_cf.setCustomValidity('You must put the same password.');
@@ -74,14 +73,12 @@ window.addEventListener('load', function() {
     password.addEventListener('keyup', function() {
         if (check === true) {
             var val = password.checkValidity();
-            console.log(val);
             if (val !== true) {
                 password.classList.add('invalid_love');
                 password.classList.remove('valid_hate');
                 nice_p.classList.add('love_yes');
                 nice_p.classList.remove('love_no');
 
-                console.log(5);
             } else {
                 password.classList.add('valid_hate');
                 password.classList.remove('invalid_love');
@@ -92,18 +89,14 @@ window.addEventListener('load', function() {
     });
 
     password_cf.addEventListener('keyup', function() {
-        console.log(555)
         if (check === true) {
             var ans = password_matching();
-            console.log(ans)
             if (ans !== true) {
                 password_cf.classList.add('invalid_love');
                 nice_pp.classList.add('love_yes');
                 nice_pp.classList.remove('love_no');
                 password_cf.classList.remove('valid_hate');
-                console.log(5);
             } else {
-                console.log(666)
                 password_cf.classList.add('valid_hate');
                 nice_pp.classList.add('love_no');
                 nice_pp.classList.remove('love_yes');
@@ -150,13 +143,11 @@ function Update() {
         "password_cf": document.getElementById('pwd_cf').value
     }
     data = JSON.stringify(formdata);
-    console.log(data);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/userprofile", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
-            console.log('userprofile');
             if (xhr.status == 403) {
                 alert(xhr.responseText);
             } else if (xhr.status == 200) {

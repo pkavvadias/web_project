@@ -9,7 +9,6 @@ function Statistics() {
 
     xhr.onload = function() {
         var x = xhr.response;
-        console.log(x.username);
         var theDiv = document.getElementById("username");
         var content = document.createTextNode("Hello " + x.username + "!");
         theDiv.appendChild(content);

@@ -10,7 +10,6 @@ function HTTPAnalysis() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var x = xhr.response;
-            console.log(x);
             var data = JSON.parse(x)
             var ttls = new Array();
             var percentages = new Array();
@@ -53,7 +52,6 @@ function HTTPAnalysis() {
                 ttl_array.push(ttls[x].contentType);
                 isp_array.push(ttls[x].isp);
             }
-            console.log(ttl_array, isp_array);
 
             var ttl_array = [...new Set(ttl_array)]
             var isp_array = [...new Set(isp_array)]
@@ -242,10 +240,8 @@ function binning(data) {
             new_data.push(data[x].time);
         }
     }
-    console.log(new_data);
     var min = Math.min(...new_data);
     var max = Math.max(...new_data);
-    console.log(min, max);
 
     var step = Math.ceil((max - min) / 10);
 
@@ -253,10 +249,9 @@ function binning(data) {
 
     var ran = d3.range(min, max, step);
 
-    // [0, 0.2, 0.4, 0.6000000000000001, 0.8]
     var histGenerator = d3.bin()
-        .domain([min, max]) // Set the domain to cover the entire intervall [0,1]
-        .thresholds([ran[0], ran[1], ran[2], ran[3], ran[4], ran[5], ran[6], ran[7], ran[8], ran[9]]); // number of thresholds; this will create 9+1 bins
+        .domain([min, max]) // Set the domain to cover the entire intervall [min,max]
+        .thresholds([ran[0], ran[1], ran[2], ran[3], ran[4], ran[5], ran[6], ran[7], ran[8], ran[9]]); // number of thresholds; this will create 10 bins
     // )
 
     var bins = histGenerator(new_data);
@@ -278,11 +273,6 @@ function binning(data) {
             bins[x].push(0)
         }
 
-        //bins[x].delete(x1);
-        //if (bins[x].length === 0 ) {
-        //bins[x]= 0
-        // }
-
     }
     cool["10"] = { x: max };
     var JS = {
@@ -294,7 +284,6 @@ function binning(data) {
 
 function updateChart(chart, config, dataset, ctype, isps) {
     const average = arr => arr.reduce((p, c) => parseFloat(p) + parseFloat(c), 0) / arr.length;
-    console.log(dataset);
     var finaldata = new Array();
     if (ctype.length != 0 && isps.length != 0) {
         for (y in ctype) {
@@ -308,14 +297,11 @@ function updateChart(chart, config, dataset, ctype, isps) {
                 }
             }
         }
-        console.log(finaldata);
 
         var retur = binning(finaldata);
-        console.log(retur);
         var input = retur.y;
         var input_2 = new Array();
         var labelss = retur.x;
-        console.log(input, labelss);
         for (x in input) {
             if (input[x].length != 0) {
                 var JS = {
@@ -329,11 +315,9 @@ function updateChart(chart, config, dataset, ctype, isps) {
         var labelss_1 = new Array();
 
         input_3 = input_2.map(function(e) {
-            console.log(e.y);
             return e.y;
         });
         labelss_1 = labelss.map(function(e) {
-            console.log(e.x);
             return e.x;
         });
 
@@ -351,13 +335,8 @@ function updateChart(chart, config, dataset, ctype, isps) {
         };
 
         chart.data.labels = labelss_1;
-        console.log(chart.data.labels);
         config.data.datasets.splice(0, 1); //remove old dataset
         config.data.datasets.push(newDataset);
-        // chart.data.datasets.data = input_4;
-        // chart.data.datasets.forEach((dataset) => {
-        //     dataset.data.push(input_4);
-        // });
         chart.update();
 
 
@@ -380,13 +359,6 @@ function updateChart(chart, config, dataset, ctype, isps) {
             fill: false,
         };
 
-        // config.data.datasets.splice(0, 1);//remove old dataset
-        // config.data.datasets.push(newDataset);
-        // chart.update();
-        // config.data.splice(0, 1);//remove old dataset
-        // config.data.push(newdata);
-        // config.data.datasets.push(newDataset);
-        // chart.update();
     } else {
         config.data.datasets.splice(0, 1);
         chart.update();
@@ -395,8 +367,6 @@ function updateChart(chart, config, dataset, ctype, isps) {
 
 function updateChart_1(chart, config_1, dataset, ctype, isps) {
 
-    // const average = arr => arr.reduce((p, c) => Number(p) + Number(c), 0);
-    console.log(dataset);
     var finaldata = new Array();
     if (ctype.length != 0 && isps.length != 0) {
         for (y in ctype) {
@@ -410,7 +380,6 @@ function updateChart_1(chart, config_1, dataset, ctype, isps) {
                 }
             }
         }
-        console.log(finaldata);
 
         var max_data = new Array();
         var min_data = new Array();
@@ -421,7 +390,6 @@ function updateChart_1(chart, config_1, dataset, ctype, isps) {
         }
 
 
-        console.log(max_data, min_data);
 
         var number_one = 0;
         var number_two = 0;
@@ -434,7 +402,6 @@ function updateChart_1(chart, config_1, dataset, ctype, isps) {
             number_two = number_two + Number(min_data[x]);
         }
 
-        console.log(number_one, number_two);
         // Dynamically assign colors
         var color1 = [];
 
@@ -463,8 +430,7 @@ function updateChart_1(chart, config_1, dataset, ctype, isps) {
 }
 
 function updateChart_2(chart, config_2, dataset, ctype, isps) {
-    // const average = arr => arr.reduce((p, c) => Number(p) + Number(c), 0) / arr.length;
-    console.log(dataset);
+
     var finaldata = new Array();
     if (ctype.length != 0 && isps.length != 0) {
         for (y in ctype) {
@@ -478,7 +444,6 @@ function updateChart_2(chart, config_2, dataset, ctype, isps) {
                 }
             }
         }
-        console.log(finaldata);
 
         var cache_data = new Array();
 
@@ -487,7 +452,6 @@ function updateChart_2(chart, config_2, dataset, ctype, isps) {
         }
 
 
-        console.log(cache_data);
 
         var number_cache = 0;
 
@@ -495,7 +459,6 @@ function updateChart_2(chart, config_2, dataset, ctype, isps) {
             number_cache = number_cache + Number(cache_data[x]);
         }
 
-        console.log(number_cache);
         // Dynamically assign colors
         var color1 = [];
 
@@ -531,4 +494,3 @@ var newColors = function() {
 };
 
 document.addEventListener('DOMContentLoaded', HTTPAnalysis);
-//document.addEventListener('DOMContentLoaded', flow);

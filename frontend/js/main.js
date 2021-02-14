@@ -27,7 +27,6 @@ function Responses() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
-            console.log('mainjs');
             if (xhr.status == 403) {
                 header.classList.add('invalid_god');
                 wrong.classList.add('love_yes_yes');
@@ -35,7 +34,6 @@ function Responses() {
             } else if (xhr.status == 200) {
                 window.location.href = "./dashboard"
             } else if (xhr.status == 201) {
-                console.log("redirect")
                 window.location.href = "./admin"
             }
         }

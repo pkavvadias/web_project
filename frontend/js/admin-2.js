@@ -15,8 +15,6 @@ function ResponseTimes() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var x = xhr.response;
             var data = JSON.parse(x)
-            console.log(data)
-            //var labelsType = data.content_type.map(a => a.content_type)
             var labelsType = new Array();
             var days = new Array();
             var isps = new Array();
@@ -173,7 +171,6 @@ function updateChart(chart, config, dataset, ctype, dates, methods, isps) {
                 chartArray[x] = JS;
             }
         }
-        console.log(chartArray)
         var newDataset = {
             label: 'Response Time',
             backgroundColor: 'rgba(0, 0, 0, 0)',

@@ -9,7 +9,6 @@ function getInfo() {
 
     xhr.onload = function() {
         var x = xhr.response;
-        console.log(x.username);
         var theDiv = document.getElementById("username");
         var content = document.createTextNode("Username: " + x.username);
         theDiv.appendChild(content);

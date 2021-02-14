@@ -58,7 +58,6 @@ function heatmapUser() {
                 xhr_new[i].send()
             }
 
-            console.log(data_obj)
 
             var addressPoints = [];
             for (i in data_obj) {

@@ -1,6 +1,5 @@
  function basicInf() {
      // data = JSON.stringify(formdata);
-     // console.log(data);
      var xhr = new XMLHttpRequest();
 
 
@@ -119,7 +118,6 @@
              var days = hrs / 24;
              return days;
          });
-         console.log(x.avgage);
          // Dynamically assign colors
          var color3 = [];
          for (var i in labelsAvgAge) {
@@ -217,8 +215,6 @@
 
                  xhr_new[i].send()
              }
-             console.log("aaa")
-             console.log(data_obj)
              var uniqueuserip = [...new Set(userip)] //get unique userips
 
              var userlocations = new Object();
@@ -231,8 +227,6 @@
                      if (xhr_new[i].readyState === 4 && xhr_new[i].status === 200) {
 
                          res = JSON.parse(xhr_user.responseText);
-                         console.log(res.latitude);
-                         console.log(res.longitude);
                          userlocations[uniqueuserip[x]].push(res.latitude);
                          userlocations[uniqueuserip[x]].push(res.longitude);
                      }
@@ -240,7 +234,6 @@
                  xhr_user.send();
 
              }
-             console.log(userlocations);
              for (x in data_obj) {
 
              }
@@ -259,8 +252,6 @@
              };
 
              for (x in uniqueuserip) {
-
-                 console.log(userlocations[uniqueuserip[x]][0]);
                  var geojsonFeature = {
                      "type": "Feature",
                      "geometry": {
@@ -277,7 +268,6 @@
                      }
                  }).addTo(map);
              }
-             console.log(Math.max(...ips_count));
              for (x in uniqueuserip) {
                  var userPoint = new L.LatLng(userlocations[uniqueuserip[x]][0], userlocations[uniqueuserip[x]][1]);
                  for (y in data_obj) {

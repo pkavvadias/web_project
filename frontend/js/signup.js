@@ -19,16 +19,14 @@ var submited = false;
 function post_it() {
     $(document).ready(function() {
 
-        // $('form').submit(function (event) {
         if (submited) {
 
             $('#username').removeClass('valid_hate');
             $('#username').removeClass('invalid_love'); // add the error class to show red input
-            $('#error1').remove(); // add the actual error message under our input
+            $('#error1').remove();
             $('#error2').remove();
             $('#email').removeClass('valid_hate');
-            $('#email').removeClass('invalid_love'); // add the error class to show red input
-            // $('#error').remove();
+            $('#email').removeClass('invalid_love');
 
             var formData = {
                 'username': $('input[name=username]').val(),
@@ -44,16 +42,13 @@ function post_it() {
                     dataType: 'json', // what type of data do we expect back from the server
                     encode: true,
                     success: function(xhr) {
-                        console.log(xhr.url);
                         $(window).attr('location', xhr.url)
                     },
                     error: function(xhr, status, error) {
                         var res = JSON.parse(xhr.responseText);
-                        // console.log()
                         error_exists = true;
                         $('form').removeClass('was-validated');
                         // var count = res.keys(res).length;
-                        // console.log(res)
 
                         if (res.user === true && res.email === false) {
 
@@ -79,10 +74,7 @@ function post_it() {
                         }
                     }
                 })
-                // stop the form from submitting the normal way and refreshing the page
-                // event.preventDefault();
         }
-        // });
 
     });
 }
@@ -98,7 +90,6 @@ function post_it() {
 document.getElementById('pwd_cf').addEventListener('keyup', password_matching);
 
 
-// (function submit_listener() {
 'use strict';
 window.addEventListener('load', function() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -112,9 +103,6 @@ window.addEventListener('load', function() {
     const password_cf = document.getElementById('pwd_cf');
     const nice = document.getElementById('nice');
 
-    // const log = document.getElementById('log')
-    console.log(input);
-    // input.addEventListener('invalid', logValue)
 
     username.addEventListener('keyup', function() {
         if (check === true && error_exists === true) {
@@ -126,14 +114,11 @@ window.addEventListener('load', function() {
     password.addEventListener('keyup', function() {
         if (check === true) {
             var val = password.checkValidity();
-            console.log(val);
             if (val !== true) {
                 password.classList.add('invalid_love');
                 password.classList.remove('valid_hate');
                 nice_p.classList.add('love_yes');
                 nice_p.classList.remove('love_no');
-
-                console.log(5);
             } else {
                 password.classList.add('valid_hate');
                 password.classList.remove('invalid_love');
@@ -144,18 +129,14 @@ window.addEventListener('load', function() {
     });
 
     password_cf.addEventListener('keyup', function() {
-        console.log(555)
         if (check === true) {
             var ans = password_matching();
-            console.log(ans)
             if (ans !== true) {
                 password_cf.classList.add('invalid_love');
                 nice_pp.classList.add('love_yes');
                 nice_pp.classList.remove('love_no');
                 password_cf.classList.remove('valid_hate');
-                console.log(5);
             } else {
-                console.log(666)
                 password_cf.classList.add('valid_hate');
                 nice_pp.classList.add('love_no');
                 nice_pp.classList.remove('love_yes');
@@ -168,13 +149,11 @@ window.addEventListener('load', function() {
     input.addEventListener('keyup', function() {
         if (check === true) {
             var val = input.checkValidity();
-            console.log(val);
             if (val !== true) {
                 input.classList.add('invalid_love');
                 nice.classList.add('love_yes');
                 nice.classList.remove('love_no');
                 input.classList.remove('valid_hate');
-                console.log(5);
             } else {
                 input.classList.add('valid_hate');
                 nice.classList.add('love_no');
@@ -209,4 +188,3 @@ window.addEventListener('load', function() {
         }, false);
     });
 }, false);
-// })();
