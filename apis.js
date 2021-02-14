@@ -27,8 +27,6 @@ const uploadHar = (request, response) => {
             "age": request.body[i].Age,
             "last_modified": request.body[i].Last_Modified,
             "host": request.body[i].Host,
-            //"latitude_server":'',// serverIp.latitude,
-            //"longitude_server":'',//serverIp.longtitude,
             "date": helper.getCurrentDate(),
             "userip": userIP,
             "isp": '',
@@ -62,8 +60,6 @@ const updateUser = (request, response) => {
                 }
                 if (isMatch) {
                     console.log("BCRYPT");
-                    // let hashedPassword = await bcrypt.hash(request.body.password, 10);
-                    // console.log(hashedPassword)
                     if (request.body.username === "") {
                         request.body.username = request.user.username;
 
@@ -81,8 +77,6 @@ const updateUser = (request, response) => {
                             if (err) {
                                 throw err;
                             }
-                            //request.logOut();
-                            //request.user.username = request.body.username;
                             response.status(200).send("Successfull update.");
                         }
                     )
@@ -109,7 +103,7 @@ const getAdminData = (request, response) => {
                         ispNumber = results.rows[0].count;
                         helper.pool.query('SELECT content_type,starteddatetime,last_modified FROM har_data', (err, results) => {
                             items = results.rows;
-                            var temp = new Array(); //Maybe not needed now?check
+                            var temp = new Array(); 
                             for (x in items) {
                                 if (items[x].last_modified != 'null') {
                                     items[x].content_type = items[x].content_type.split(';')[0];
@@ -175,7 +169,6 @@ const getServerIPs = (request, response) => {
     })
 }
 const headerAnalysis = (request, response) => {
-    //var TTL = new Array();
     var ISPs = new Array();
     var final = new Object();
     helper.pool.query('SELECT content_type,cache_control,expires,last_modified,isp FROM har_data', (err, results) => {
@@ -197,14 +190,12 @@ const headerAnalysis = (request, response) => {
                     TTLJSON.content_type = items[x].content_type;
                     var maxage = items[x].cache_control.substring(index + 8).split(',')[0]; //get only max age value
                     TTLJSON.time = maxage;
-                    //TTL.push(TTLJSON)
                     final[ISPs[y]].ttl.push(TTLJSON);;
                 } else if (items[x].expires != 'null' && items[x].last_modified != 'null' && items[x].isp == ISPs[y]) {
                     TTLJSON.content_type = items[x].content_type;
                     var expire = new Date(items[x].expires).getTime();
                     var lastmodif = new Date(items[x].last_modified).getTime();
-                    TTLJSON.time = ((expire - lastmodif))
-                        //TTL.push(TTLJSON)                    
+                    TTLJSON.time = ((expire - lastmodif))   
                     final[ISPs[y]].ttl.push(TTLJSON);;
                 }
             }
@@ -215,7 +206,6 @@ const headerAnalysis = (request, response) => {
                 var minfresh = results.rows;
                 helper.pool.query("SELECT COUNT(cache_control),content_type,isp FROM har_data WHERE cache_control LIKE '%max-stale%' GROUP BY content_type,isp", (err, results) => {
                     var max_stale = results.rows;
-                    //var percentage = new Array();
                     for (w in ISPs) {
                         final[ISPs[w]].percentages = new Array();
                         for (x in types) {
@@ -235,13 +225,11 @@ const headerAnalysis = (request, response) => {
                                     percentageJSON.max_stale = (max_stale[y].count / types[x].count)
                                 }
                             }
-                            //percentage.push(percentageJSON);
                             final[ISPs[w]].percentages.push(percentageJSON);
                         }
                     }
                     helper.pool.query('SELECT COUNT(cache_control),content_type,isp FROM har_data WHERE cache_control IS NOT null GROUP BY content_type,isp', (err, results) => {
                         var cacheability = results.rows;
-                        //var cache = new Array();
                         for (z in ISPs) {
                             final[ISPs[z]].cache = new Array();
                             for (x in types) {
@@ -255,18 +243,9 @@ const headerAnalysis = (request, response) => {
                                         cacheabilityJSON.percentage = (cacheability[y].count / types[x].count);
                                     }
                                 }
-                                //cache.push(cacheabilityJSON)
                                 final[ISPs[z]].cache.push(cacheabilityJSON)
                             }
                         }
-                        /*
-                        var analysisJSON = {
-                                ttl: TTL,
-                                percentages: percentage,
-                                cached: cache
-                            }
-                            // console.log(analysisJSON)
-                            */
                         response.json(final)
                     })
                 })

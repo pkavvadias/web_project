@@ -6,7 +6,6 @@ const apis = require('./apis')
 const cors = require('cors')
 const passport = require('passport')
 const session = require('express-session')
-const flash = require('connect-flash')
 const path = require('path')
 const bcrypt = require('bcrypt')
 const authentication = require('./passportCf')
@@ -54,7 +53,6 @@ app.get("/admin", isAdmin, function(req, res) {
 
 
 app.get("/dashboard", NotAuthenticated, function(req, res) {
-    // Is he really authenticated? True is yes.
     console.log(req.isAuthenticated());
     res.sendFile(path.join(__dirname + "/frontend/dashboard-user.html"));
 })
