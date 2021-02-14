@@ -153,7 +153,7 @@
          })
      }
      xhr.send();
-     adminMap();
+     //  adminMap();
  }
 
  function adminMap() {
