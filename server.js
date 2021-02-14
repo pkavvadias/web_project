@@ -52,14 +52,14 @@ app.get("/login", Authenticated, function(req, res) {
 })
 
 app.get("/admin", isAdmin, function(req, res) {
-    res.sendFile(path.join(__dirname + "/frontend/admin.html"));
+    res.sendFile(path.join(__dirname + "/frontend/dashboard-admin.html"));
 })
 
 
 app.get("/dashboard", NotAuthenticated, function(req, res) {
     // Is he really authenticated? True is yes.
     console.log(req.isAuthenticated());
-    res.sendFile(path.join(__dirname + "/frontend/dashboard.html"));
+    res.sendFile(path.join(__dirname + "/frontend/dashboard-user.html"));
 })
 
 app.get('/logout', function(req, res) {
@@ -68,57 +68,7 @@ app.get('/logout', function(req, res) {
     res.redirect('./login')
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.get("/userprofile", NotAuthenticated, function(req, res) {
+app.get("/updateuser", NotAuthenticated, function(req, res) {
     console.log('geia')
     res.sendFile(path.join(__dirname + "/frontend/userprofile.html"));
 

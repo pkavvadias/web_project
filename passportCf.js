@@ -84,7 +84,7 @@ function NotAuthenticated(req, res, next) {
     if (req.isAuthenticated() && req.user.username != "admin") {
         return next();
     }
-    else if (req.user.username == "admin") {
+    else if (req.user!= undefined && req.user.username == "admin") {
         res.status(201).send();
         res.redirect("./admin")
     }
