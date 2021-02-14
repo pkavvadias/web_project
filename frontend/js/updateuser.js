@@ -49,7 +49,7 @@ function password_matching() {
 
 
 var error = false;
-//(function submit_listener() {
+
 'use strict';
 window.addEventListener('load', function() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -58,14 +58,11 @@ window.addEventListener('load', function() {
     var check = true;
 
     const username = document.getElementById('username')
-        // const input = document.getElementById('email');
     const password = document.getElementById('pwd');
     const password_cf = document.getElementById('pwd_cf');
     const nice = document.getElementById('nice');
 
-    // const log = document.getElementById('log')
 
-    // input.addEventListener('invalid', logValue)
 
     username.addEventListener('keyup', function() {
         if (check === true && error === true) {

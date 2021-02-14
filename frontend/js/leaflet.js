@@ -1,6 +1,5 @@
 function heatmapUser() {
-    // data = JSON.stringify(formdata);
-    // console.log(data);
+
     var xhr = new XMLHttpRequest();
 
 
@@ -66,7 +65,6 @@ function heatmapUser() {
                 addressPoints[i] = [data_obj[i].lat, data_obj[i].long, data_obj[i].count]
             }
 
-            //  console.log(addressPoints)
 
 
             var map = L.map('map').setView([37.4043, -122.0748], 12);

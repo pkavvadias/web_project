@@ -11,13 +11,7 @@
 
      xhr.onload = function() {
          var x = xhr.response;
-         //console.log(x)
-         //console.log((x['users']))
-         //console.log(x['methodcount'])
-         //console.log(x['statuscount'])
-         //console.log(x['domaincount'])
-         //console.log(x['isps'])
-         //console.log(x['avgage'])
+
          var ctx = document.getElementById('myChart').getContext('2d');
          // Random colors
          var newColors = function() {
@@ -27,26 +21,27 @@
              return "rgb(" + r + "," + g + "," + b + ")";
          };
          var BarChart = new Chart(ctx, {
-             // The type of chart we want to create
-             type: 'horizontalBar',
+                 // The type of chart we want to create
+                 type: 'horizontalBar',
 
-             // The data for our dataset
-             data: {
-                 labels: ['Users', 'Domains', 'ISPs'],
-                 datasets: [{
-                     label: 'Users-Domains-ISPs',
+                 // The data for our dataset
+                 data: {
+                     labels: ['Users', 'Domains', 'ISPs'],
+                     datasets: [{
+                         label: 'Users-Domains-ISPs',
 
-                     data: [Number(x['users']),
-                         Number(x['domaincount']), Number(x['isps'])
-                     ],
-                     fill: false,
-                     backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)"],
-                     borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
-                     borderWidth: 1
-                 }]
-             },
-             options: { "scales": { "yAxes": [{ "ticks": { "beginAtZero": true } }] } }
-         })
+                         data: [Number(x['users']),
+                             Number(x['domaincount']), Number(x['isps'])
+                         ],
+                         fill: false,
+                         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)"],
+                         borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                         borderWidth: 1
+                     }]
+                 },
+                 options: { "scales": { "yAxes": [{ "ticks": { "beginAtZero": true } }] } }
+             })
+             // Mapping the keys-values to new variables
          var labelsMethods = x.methodcount.map(function(e) {
              return e.method;
          });
@@ -319,9 +314,6 @@
      }
  }
 
- //document.addEventListener('DOMContentLoaded', basicInf);
- //document.addEventListener('load', adminMap);
- //document.addEventListener('DOMContentLoaded', adminMap);
- //console.log(JSON.parse(xhr));
+
  window.onload = basicInf();
  //window.onload = adminMap();

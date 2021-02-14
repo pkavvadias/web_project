@@ -162,7 +162,5 @@ function adminMap() {
 }
 
 
-//document.addEventListener('load', adminMap);
+
 document.addEventListener('DOMContentLoaded', adminMap);
-//console.log(JSON.parse(xhr));
-//window.onload = adminMap();

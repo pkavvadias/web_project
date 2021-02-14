@@ -38,10 +38,7 @@ function Statistics() {
             h = (hours < 10) ? '0' + hours : hours;
             m = (minutes < 10) ? '0' + minutes : minutes;
             s = (seconds < 10) ? '0' + seconds : seconds;
-            // x = lastdate.toDateString();
-            //  y = lastdate.toTimeString();
-            //  let hhmm = y.slice(3, 15);
-            // prints date & time in YYYY-MM-DD format
+
             finalDate = (year + "-" + mon + "-" + day + " " + h + ":" + m + ":" + s);
 
 

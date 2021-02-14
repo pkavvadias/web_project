@@ -14,7 +14,7 @@ function initialize(passport) {
                 if (err) {
                     throw err;
                 }
-                // console.log(results.rows);
+
 
                 if (results.rows.length > 0) {
                     // parsing the user to the user const
@@ -28,7 +28,7 @@ function initialize(passport) {
                             return done(null, user);
                         } else {
                             //incorrect password
-                            //response.send("error");
+
                             return done(null, false, { message: "Incorrect password." });
                         }
                     });
@@ -65,7 +65,7 @@ function initialize(passport) {
             if (err) {
                 return done(err);
             }
-            // console.log(results.rows[0].username)
+
             return done(null, results.rows[0]);
         });
     });
@@ -83,13 +83,13 @@ function Authenticated(req, res, next) {
 function NotAuthenticated(req, res, next) {
     if (req.isAuthenticated() && req.user.username != "admin") {
         return next();
-    }
-    else if (req.user!= undefined && req.user.username == "admin") {
+    } else if (req.user != undefined && req.user.username == "admin") {
         res.status(201).send();
         res.redirect("./admin")
     }
     res.redirect("./login");
 }
+
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.username == "admin") {
         return next();
@@ -99,18 +99,16 @@ function isAdmin(req, res, next) {
 
 const login = (req, res, next) => {
     console.log(req.body);
-    passport.authenticate('local', function (err, user, info) {
+    passport.authenticate('local', function(err, user, info) {
         console.log(user)
         if (err) { return next(err); }
-        if (!user) { res.status(403).send("Wrong username or password"); }
-        else if (user.username == "admin") {
-            req.logIn(user, function (err) {
+        if (!user) { res.status(403).send("Wrong username or password"); } else if (user.username == "admin") {
+            req.logIn(user, function(err) {
                 if (err) { return next(err); }
                 res.status(201).send()
             });
-        }
-        else {
-            req.logIn(user, function (err) {
+        } else {
+            req.logIn(user, function(err) {
                 if (err) { return next(err); }
                 res.redirect("./dashboard");
             });
@@ -164,8 +162,7 @@ async function register(req, res) {
         } else if (ema === true && user === false) {
             console.log("email")
             res.status(400).send({ "user": false, "email": true });
-        }
-        else if (user === true && ema === true) {
+        } else if (user === true && ema === true) {
             console.log("both")
             res.status(400).send({ "user": true, "email": true });
         } else {

@@ -37,10 +37,7 @@ app.use(bodyParser.json({ limit: '100mb' }));
 
 
 
-app.get('/', function(req, res) {
-    // res.send('Hello World!')
-    res.sendFile(path.join(__dirname + "/frontend/continue.html"));
-})
+
 
 app.get("/register", Authenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/signup.html"));
@@ -64,7 +61,7 @@ app.get("/dashboard", NotAuthenticated, function(req, res) {
 
 app.get('/logout', function(req, res) {
     req.logOut();
-    //req.flash('success_msg', "Logged Out")
+
     res.redirect('./login')
 
 })

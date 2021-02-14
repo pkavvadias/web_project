@@ -22,11 +22,10 @@ function Responses() {
         "password": password.value
     }
     data = JSON.stringify(formdata);
-    // console.log(data);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/login", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             console.log('mainjs');
             if (xhr.status == 403) {
@@ -45,7 +44,7 @@ function Responses() {
 }
 
 
-username.addEventListener('keyup', function () {
+username.addEventListener('keyup', function() {
     if (check === true) {
         check = false;
         header.classList.remove('invalid_god');
@@ -53,7 +52,7 @@ username.addEventListener('keyup', function () {
         wrong.classList.add('love_no');
     }
 });
-username.addEventListener('keyup', function () {
+username.addEventListener('keyup', function() {
     if (check === true) {
         check = false;
         header.classList.remove('invalid_god');

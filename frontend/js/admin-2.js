@@ -58,7 +58,6 @@ function ResponseTimes() {
                 opt.text = methods[x];
                 selectTypes.add(opt);
             }
-
             var ctx = document.getElementById('myChart6').getContext('2d');
             var config = {
                 type: 'line',
@@ -88,14 +87,14 @@ function ResponseTimes() {
                         intersect: true
                     },
                     scales: {
-                        xAxes: {
+                        x: {
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Hours',
+                                labelString: 'Hours'
                             }
                         },
-                        yAxes: {
+                        y: {
                             display: true,
                             scaleLabel: {
                                 display: true,
@@ -106,6 +105,7 @@ function ResponseTimes() {
                 }
             };
             window.myBar = new Chart(ctx, config);
+
             $('select').selectpicker();
             $('#ctype,#dates,#methods,#isp').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                 var ctypeValues = $('#ctype').val();

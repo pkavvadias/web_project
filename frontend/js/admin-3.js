@@ -1,21 +1,16 @@
-
-
-
-
-
-
 function HTTPAnalysis() {
 
     var xhr = new XMLHttpRequest();
 
-    xhr.open("GET", "http://localhost:3000/headeranalysis", true);
+    xhr.open("GET", "http://localhost:3000/headeranalysis", false);
 
     //xhr.setRequestHeader('Content-Type', 'json');
-    xhr.responseType = 'json';
+    // xhr.responseType = 'json';
 
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var x = xhr.response;
+            console.log(x);
             var data = JSON.parse(x)
             var ttls = new Array();
             var percentages = new Array();
@@ -23,15 +18,15 @@ function HTTPAnalysis() {
             //var labelsType = data.content_type.map(a => a.content_type)
             var labelsType = new Array();
             for (x in data) {
-                for ( y in data[x].ttl){
-                    TTLJSON = {
+                for (y in data[x].ttl) {
+                    ttlJSON = {
                         isp: x,
                         contentType: data[x].ttl[y].content_type,
                         time: data[x].ttl[y].time
                     }
-                    ttls.push(TTLJSON)
-                } 
-                for ( y in data[x].percentages){
+                    ttls.push(ttlJSON)
+                }
+                for (y in data[x].percentages) {
                     percentagesJSON = {
                         isp: x,
                         contentType: data[x].percentages[y].content_type,
@@ -40,87 +35,197 @@ function HTTPAnalysis() {
                     }
                     percentages.push(percentagesJSON)
                 }
-                for ( y in data[x].cache){
+                for (y in data[x].cache) {
                     cacheJSON = {
                         isp: x,
                         contentType: data[x].cache[y].content_type,
                         percentage: data[x].cache[y].percentage
                     }
                     cache.push(cacheJSON)
-                }  
+                }
 
             }
-            var labelsType = [...new Set(labelsType)]
-            var isps = [...new Set(isps)]
-            
-            for (x in labelsType) {
-                selectTypes = document.getElementById("ctype");
-                var opt = document.createElement("option");
-                opt.text = labelsType[x];
-                selectTypes.add(opt);
+
+            var ttl_array = new Array();
+            var isp_array = new Array();
+
+            for (x in ttls) {
+                ttl_array.push(ttls[x].contentType);
+                isp_array.push(ttls[x].isp);
             }
-            for (x in days) {
-                selectTypes = document.getElementById("dates");
+            console.log(ttl_array, isp_array);
+
+            var ttl_array = [...new Set(ttl_array)]
+            var isp_array = [...new Set(isp_array)]
+
+            for (x in ttl_array) {
+                selectTypes = document.getElementById("ctype");
+                selectTypes_1 = document.getElementById("ctype_1")
+                selectTypes_2 = document.getElementById("ctype_2")
                 var opt = document.createElement("option");
-                opt.text = days[x];
+                var opt_1 = document.createElement("option");
+                var opt_2 = document.createElement("option");
+                opt.text = ttl_array[x];
+                opt_1.text = ttl_array[x];
+                opt_2.text = ttl_array[x];
                 selectTypes.add(opt);
+                selectTypes_1.add(opt_1);
+                selectTypes_2.add(opt_2);
+            }
+            for (x in isp_array) {
+                selectTypes = document.getElementById("isp");
+                selectTypes_1 = document.getElementById("isp_1");
+                selectTypes_2 = document.getElementById("isp_2");
+                var opt = document.createElement("option");
+                var opt_1 = document.createElement("option");
+                var opt_2 = document.createElement("option");
+                opt.text = isp_array[x];
+                opt_1.text = isp_array[x];
+                opt_2.text = isp_array[x];
+                selectTypes.add(opt);
+                selectTypes_1.add(opt_1);
+                selectTypes_2.add(opt_2);
             }
 
             var ctx = document.getElementById('myChart6').getContext('2d');
+            var ctx_1 = document.getElementById('myChart7').getContext('2d');
+            var ctx_2 = document.getElementById('myChart8').getContext('2d');
+
+            var color = Chart.helpers.color;
             var config = {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
-                        '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+                    labels: [],
                     datasets: [{
-                        label: 'Response Times Dataset',
+                        label: 'TTL Histogram',
+                        backgroundColor: color('rgba(255, 0, 0, 0.6)').alpha(0.5).rgbString(),
+                        borderColor: 'rgba(255, 0, 0, 0.6)',
+                        borderWidth: 1,
                         data: [],
-                        fill: false,
+
                     }]
                 },
                 options: {
+
+                    scales: {
+                        xAxes: [{
+                            offset: true,
+                            barPercentage: 1.0,
+                            categoryPercentage: 1.0,
+                            gridLines: {
+                                offsetGridLines: false
+                            }
+                        }]
+                    },
                     responsive: true,
                     plugins: {
+                        legend: {
+                            position: 'top',
+                        },
                         title: {
                             display: true,
-                            text: 'Chart.js Line Chart'
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
+                            text: 'TTLs Histogram'
                         }
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
-                    },
+                    }
+
+
+
+                }
+            };
+
+            var config_1 = {
+                type: 'doughnut',
+                data: {
+                    labels: ['maxstale', 'minfresh', 'Without any'],
+                    datasets: [{
+                        label: 'Max-stale Min-fresh percentages',
+                        backgroundColor: color('rgba(255, 0, 0, 0.6)').alpha(0.5).rgbString(),
+                        borderColor: 'rgba(255, 0, 0, 0.6)',
+                        borderWidth: 1,
+                        data: [],
+
+                    }]
+                },
+                options: {
+
                     scales: {
-                        x: {
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Hours'
+                        xAxes: [{
+                            offset: true,
+                            gridLines: {
+                                offsetGridLines: false
                             }
+                        }]
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
                         },
-                        y: {
+                        title: {
                             display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Response Times'
-                            }
+                            text: 'Max-stale Min-fresh percentages'
                         }
                     }
                 }
-            };
-            window.myBar = new Chart(ctx, config);
+            }
+            var config_2 = {
+                type: 'doughnut',
+                data: {
+                    labels: ['cashable directives', 'Without any'],
+                    datasets: [{
+                        label: 'Cashable directives percentages',
+                        backgroundColor: color('rgba(255, 0, 0, 0.6)').alpha(0.5).rgbString(),
+                        borderColor: 'rgba(255, 0, 0, 0.6)',
+                        borderWidth: 1,
+                        data: [],
+
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        xAxes: [{
+                            offset: true,
+                            gridLines: {
+                                offsetGridLines: false
+                            }
+                        }]
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Max-stale Min-fresh percentages'
+                        }
+                    }
+                }
+            }
+
+
+            var chart_1 = new Chart(ctx, config);
+            var chart_2 = new Chart(ctx_1, config_1);
+            var chart_3 = new Chart(ctx_2, config_2);
 
             $('select').selectpicker();
-            $('#ctype,#dates,#methods,#isp').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            $('#ctype,#isp').on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
                 var ctypeValues = $('#ctype').val();
-                var datesValues = $('#dates').val();
-                var methodsValues = $('#methods').val();
                 var ispValues = $('#isp').val();
-                updateChart(window.myBar, config, data, ctypeValues, datesValues, methodsValues, ispValues);
+                updateChart(chart_1, config, ttls, ctypeValues, ispValues);
+            });
+
+            $('#ctype_1,#isp_1').on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
+                var ctypeValues = $('#ctype_1').val();
+                var ispValues = $('#isp_1').val();
+                updateChart_1(chart_2, config_1, percentages, ctypeValues, ispValues);
+            });
+
+            $('#ctype_2,#isp_2').on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
+                var ctypeValues = $('#ctype_2').val();
+                var ispValues = $('#isp_2').val();
+                updateChart_2(chart_3, config_2, cache, ctypeValues, ispValues);
             });
 
         };
@@ -128,8 +233,302 @@ function HTTPAnalysis() {
     xhr.send();
 }
 
+function binning(data) {
+    var new_data = new Array();
+    for (x in data) {
+        if (data[x].time < 0) {
+            new_data.push("0");
+        } else {
+            new_data.push(data[x].time);
+        }
+    }
+    console.log(new_data);
+    var min = Math.min(...new_data);
+    var max = Math.max(...new_data);
+    console.log(min, max);
+
+    var step = Math.ceil((max - min) / 10);
+
+    var ran = new Array();
+
+    var ran = d3.range(min, max, step);
+
+    // [0, 0.2, 0.4, 0.6000000000000001, 0.8]
+    var histGenerator = d3.bin()
+        .domain([min, max]) // Set the domain to cover the entire intervall [0,1]
+        .thresholds([ran[0], ran[1], ran[2], ran[3], ran[4], ran[5], ran[6], ran[7], ran[8], ran[9]]); // number of thresholds; this will create 9+1 bins
+    // )
+
+    var bins = histGenerator(new_data);
+
+    var cool = new Array();
+
+    for (let x in bins) {
+
+        var JS = {
+            x: bins[x].x0
+        };
+
+        cool.push(JS);
+
+        delete bins[x]["x0"]
+        delete bins[x]["x1"]
+        if (bins[x].length == 0) {
+            bins[x].push(0)
+            bins[x].push(0)
+        }
+
+        //bins[x].delete(x1);
+        //if (bins[x].length === 0 ) {
+        //bins[x]= 0
+        // }
+
+    }
+    cool["10"] = { x: max };
+    var JS = {
+        x: cool,
+        y: bins
+    };
+    return JS;
+}
+
+function updateChart(chart, config, dataset, ctype, isps) {
+    const average = arr => arr.reduce((p, c) => parseFloat(p) + parseFloat(c), 0) / arr.length;
+    console.log(dataset);
+    var finaldata = new Array();
+    if (ctype.length != 0 && isps.length != 0) {
+        for (y in ctype) {
+            for (x in dataset) {
+                if (dataset[x].contentType == ctype[y]) {
+                    for (k in isps) {
+                        if (isps[k] == dataset[x].isp) {
+                            finaldata.push(dataset[x])
+                        }
+                    }
+                }
+            }
+        }
+        console.log(finaldata);
+
+        var retur = binning(finaldata);
+        console.log(retur);
+        var input = retur.y;
+        var input_2 = new Array();
+        var labelss = retur.x;
+        console.log(input, labelss);
+        for (x in input) {
+            if (input[x].length != 0) {
+                var JS = {
+                    y: average(input[x])
+                };
+                input_2[x] = JS;
+            }
+        }
+
+        var input_3 = new Array();
+        var labelss_1 = new Array();
+
+        input_3 = input_2.map(function(e) {
+            console.log(e.y);
+            return e.y;
+        });
+        labelss_1 = labelss.map(function(e) {
+            console.log(e.x);
+            return e.x;
+        });
 
 
+        console.log(input_3, labelss_1);
+
+
+        var newDataset = {
+            label: 'TTL Histogram',
+            backgroundColor: 'rgba(255, 0, 0, 0.3)',
+            borderColor: 'rgba(255, 0, 0, 0.6)',
+            hoverBackgroundColor: 'rgba(255, 0, 0, 0.9)',
+            borderWidth: 1,
+            data: input_3,
+        };
+
+        chart.data.labels = labelss_1;
+        console.log(chart.data.labels);
+        config.data.datasets.splice(0, 1); //remove old dataset
+        config.data.datasets.push(newDataset);
+        // chart.data.datasets.data = input_4;
+        // chart.data.datasets.forEach((dataset) => {
+        //     dataset.data.push(input_4);
+        // });
+        chart.update();
+
+
+        var newdata = {
+            labels: labelss,
+            label: 'Response Time',
+            data: input,
+            backgroundColor: 'green',
+            fill: false,
+        }
+
+        var newLabels = {
+            labels: labelss
+        }
+
+        var newDataset = {
+            label: 'Response Time',
+            data: input,
+            backgroundColor: 'green',
+            fill: false,
+        };
+
+        // config.data.datasets.splice(0, 1);//remove old dataset
+        // config.data.datasets.push(newDataset);
+        // chart.update();
+        // config.data.splice(0, 1);//remove old dataset
+        // config.data.push(newdata);
+        // config.data.datasets.push(newDataset);
+        // chart.update();
+    } else {
+        config.data.datasets.splice(0, 1);
+        chart.update();
+    }
+}
+
+function updateChart_1(chart, config_1, dataset, ctype, isps) {
+
+    // const average = arr => arr.reduce((p, c) => Number(p) + Number(c), 0);
+    console.log(dataset);
+    var finaldata = new Array();
+    if (ctype.length != 0 && isps.length != 0) {
+        for (y in ctype) {
+            for (x in dataset) {
+                if (dataset[x].contentType == ctype[y]) {
+                    for (k in isps) {
+                        if (isps[k] == dataset[x].isp) {
+                            finaldata.push(dataset[x])
+                        }
+                    }
+                }
+            }
+        }
+        console.log(finaldata);
+
+        var max_data = new Array();
+        var min_data = new Array();
+
+        for (x in finaldata) {
+            max_data.push(finaldata[x].maxstale);
+            min_data.push(finaldata[x].minfresh);
+        }
+
+
+        console.log(max_data, min_data);
+
+        var number_one = 0;
+        var number_two = 0;
+
+        for (x in max_data) {
+            number_one = number_one + Number(max_data[x]);
+        }
+
+        for (x in min_data) {
+            number_two = number_two + Number(min_data[x]);
+        }
+
+        console.log(number_one, number_two);
+        // Dynamically assign colors
+        var color1 = [];
+
+        for (let x = 0; x < 2; x++) {
+            color1.push(newColors());
+
+        }
+
+
+        var newDataset = {
+            label: 'Max-stale, Min-stale to all Packages Percentages',
+            backgroundColor: color1,
+            borderColor: 'rgba(255, 0, 0, 0.6)',
+            hoverBackgroundColor: 'rgba(255, 0, 0, 0.9)',
+            borderWidth: 1,
+            data: [number_one, number_two, (100 - number_one - number_two)],
+        };
+
+        config_1.data.datasets.splice(0, 1); //remove old dataset
+        config_1.data.datasets.push(newDataset);
+        chart.update();
+    } else {
+        config_1.data.datasets.splice(0, 1);
+        chart.update();
+    }
+}
+
+function updateChart_2(chart, config_2, dataset, ctype, isps) {
+    // const average = arr => arr.reduce((p, c) => Number(p) + Number(c), 0) / arr.length;
+    console.log(dataset);
+    var finaldata = new Array();
+    if (ctype.length != 0 && isps.length != 0) {
+        for (y in ctype) {
+            for (x in dataset) {
+                if (dataset[x].contentType == ctype[y]) {
+                    for (k in isps) {
+                        if (isps[k] == dataset[x].isp) {
+                            finaldata.push(dataset[x])
+                        }
+                    }
+                }
+            }
+        }
+        console.log(finaldata);
+
+        var cache_data = new Array();
+
+        for (x in finaldata) {
+            cache_data.push(finaldata[x].percentage);
+        }
+
+
+        console.log(cache_data);
+
+        var number_cache = 0;
+
+        for (x in cache_data) {
+            number_cache = number_cache + Number(cache_data[x]);
+        }
+
+        console.log(number_cache);
+        // Dynamically assign colors
+        var color1 = [];
+
+        for (let x = 0; x < 2; x++) {
+            color1.push(newColors());
+
+        }
+
+
+        var newDataset = {
+            label: 'Cacheable to all Packages Percentages',
+            backgroundColor: color1,
+            borderColor: 'rgba(255, 0, 0, 0.6)',
+            hoverBackgroundColor: 'rgba(255, 0, 0, 0.9)',
+            borderWidth: 1,
+            data: [number_cache, (100 - number_cache)],
+        };
+
+        config_2.data.datasets.splice(0, 1); //remove old dataset
+        config_2.data.datasets.push(newDataset);
+        chart.update();
+    } else {
+        config_2.data.datasets.splice(0, 1);
+        chart.update();
+    }
+}
+
+var newColors = function() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+};
 
 document.addEventListener('DOMContentLoaded', HTTPAnalysis);
 //document.addEventListener('DOMContentLoaded', flow);
