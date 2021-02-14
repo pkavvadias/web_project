@@ -146,7 +146,7 @@ window.addEventListener('load', function() {
 
 function Update() {
     let formdata = {
-        "username": document.getElementById('username').value,
+        "username": document.getElementById('username_form').value,
         "password_user": document.getElementById('pwd_old').value,
         "password_old": document.getElementById('pwd_old1').value,
         "password": document.getElementById('pwd').value,

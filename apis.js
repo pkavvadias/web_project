@@ -55,6 +55,7 @@ const updateUser = (request, response) => {
             if (request.body.password_old === "") {
                 request.body.password_old = request.body.password_user;
             }
+            console.log(request.body.username)
             bcrypt.compare(request.body.password_old, results.rows[0].password, async(err, isMatch) => {
                 if (err) {
                     console.log(err);
@@ -284,13 +285,25 @@ const getUserAddresses = (request, response) => {
 const getUserStats = (request, response) => {
     console.log(request.user.username)
     helper.pool.query("SELECT COUNT(*),username_user, date FROM har_data WHERE username_user=$1  GROUP BY username_user,date ORDER BY date DESC", [request.user.username], (err, results) => {
-        stats = {
-            username: request.user.username,
-            total: results.rows.length,
-            lastdate: results.rows[0].date,
+        if (results.rows[0] == null) {
+            stats = {
+                username: request.user.username,
+                total: 0,
+                lastdate: 0
+            }
+        } else {
+
+
+            stats = {
+                username: request.user.username,
+                total: results.rows.length,
+                lastdate: results.rows[0].date,
+            }
         }
         helper.pool.query("SELECT email FROM users WHERE username=$1  GROUP BY email", [request.user.username], (err, results) => {
             stats['email'] = results.rows[0].email
+
+
             response.json(stats)
 
             console.log(stats)
