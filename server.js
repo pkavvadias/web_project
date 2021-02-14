@@ -34,7 +34,10 @@ app.get("/register", Authenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/signup.html"));
 
 })
+app.get("/", Authenticated, function(req, res) {
+    res.redirect("./login");
 
+})
 app.get("/login", Authenticated, function(req, res) {
     res.sendFile(path.join(__dirname + "/frontend/login.html"));
 })
