@@ -235,7 +235,8 @@ function binning(data) {
     var new_data = new Array();
     for (x in data) {
         if (data[x].time < 0) {
-            new_data.push("0");
+            // new_data.push("0");
+            new_data.push(data[x].time);
         } else {
             new_data.push(data[x].time);
         }
@@ -305,7 +306,7 @@ function updateChart(chart, config, dataset, ctype, isps) {
         for (x in input) {
             if (input[x].length != 0) {
                 var JS = {
-                    y: average(input[x])
+                    y: input[x].length
                 };
                 input_2[x] = JS;
             }
